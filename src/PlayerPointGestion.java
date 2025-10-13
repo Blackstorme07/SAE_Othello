@@ -1,16 +1,31 @@
-class PlayerPointGestion {
+public class PlayerPointGestion {
 	
 	char currentPlayer = 'x'; // le joueur avec les pions 'x' commence
 	
+	char[][] grid = {
+		{'x', ' ', ' ', ' '},
+		{' ', 'x', 'o', ' '},
+		{' ', 'o', 'x', ' '},
+		{' ', ' ', ' ', ' '}
+	};
+	
+	boolean[][] allowedCoup = {
+		{false, false, true, false},
+		{false, false, false, true},
+		{true, false, false, false},
+		{false, true, false, false}
+	};
+	
+	boolean[][] falseTab = new boolean[4][4];
+	
 	void principal(){
-		// tests pointsCalculation
-		// exemple de grille de jeu gridExample
-		// pointsCalculation(gridExample);
+		//displayTab3d(grid);
+		//addHat();
+		//displayTab3d(grid);
+		//removeHat();
+		//displayTab3d(grid);
 		
-		// tests pointsCalculation
-		System.out.println(currentPlayer);
-		switchPlayer();
-		System.out.println(currentPlayer);
+		System.out.println(finJeu());
 	}
 	
 	/**
@@ -46,4 +61,91 @@ class PlayerPointGestion {
 			currentPlayer = 'x';
 		}
 	}
+	
+	/**
+	 * ajoute le caractere '^' dans la grille de jeu aux endroits ou le coup joue est legale
+	 * @author S. GIRARDEAU
+	 */
+	void addHat(){
+		for (int i = 0; i < allowedCoup.length; i++) { // allowedCoup est a remplacer par authorizedLocation
+			for (int j = 0; j < allowedCoup[i].length; j++) {
+				if (allowedCoup[i][j]) {
+					grid[i][j] = '^';
+				}
+			}
+		}
+	}
+	/**
+	 * supprime tout les caracteres '^' de la grille de jeu
+	 * @author S. GIRARDEAU
+	 */
+	void removeHat(){
+		for (int i = 0; i < grid.length; i++) {
+			for (int j = 0; j < grid.length; j++) {
+				if (grid[i][j] == '^'){
+					grid[i][j] = ' ';
+				}
+			}
+		}
+	}
+					
+				
+	/**
+	 * Verifie si le jeu est fini ou non / s'il n'y a plus de positions autorisees dans la grille
+	 * @return end : true si le jeu est fini / false sinon
+	 * @author S. GIRARDEAU
+	 */ 
+	boolean finJeu() {
+		//allowedCoup = authorizedLocation(char[][] tab); a changer + tard
+		boolean end = true;
+		
+		for(int i = 0; i < allowedCoup.length; i++){
+			for(int j = 0; j < allowedCoup[i].length; j++){
+				if (allowedCoup[i][j] == true) {
+					end = false;
+				}
+			}
+		}
+		return end;
+	}
+	
+	/**Affiche correctement le tableau
+	 * @param tab : le tableau a remplir
+	 **/
+	void displayTab3d (char[][] tab){
+		// System.out.print("\033c"); //Vide la console
+		System.out.print("   ");
+		for(int k = 97; k < tab.length + 96; k++){  //Affiche les lettres indiquant les colonnes 
+			System.out.print((char)k + " ");        //transformation des chiffre en lettre (autorisee par Mme Naert)
+		}
+		System.out.println((char)(tab.length + 96));
+		
+		for(int i = 0; i < tab.length; i++){
+			if (i < 9){
+				System.out.print(" " + (i + 1) + " "); //Affiche les nombres indiquant les lignes
+			}else{
+				System.out.print((i + 1)+ " ");
+			}
+			for (int j = 0; j < tab[i].length-1; j++){
+				System.out.print (tab[i][j]);       //Affichage du plateau
+				System.out.print('|');
+			}
+			System.out.println(tab[i][tab[i].length-1]);
+		}
+	}
+	
+	void displayTab(int[] t){
+        int i = 0;
+        System.out.print("{");
+    
+        while (i<t.length-1) {
+            System.out.print(t[i] + ",");
+            i++;
+        }
+        if(t.length != 0) {
+            System.out.println(t[i]+"}");
+        } else {
+            System.out.println("}");
+        }
+    }
 }
