@@ -1,4 +1,4 @@
-class Fonctions{
+public class Fonctions{
 	void principal(){
 		System.out.println(">>> DÉBUT DU PROGRAMME <<<");
 		int taille;
@@ -30,8 +30,8 @@ class Fonctions{
 	void displayTab (char[][] tab){
 		System.out.print("\033c"); //Vide la console
 		System.out.print("   ");
-		for(int k = 97; k < tab.length + 96; k++){  //Affiche les lettres indiquant les colonnes
-			System.out.print((char)k + " ");
+		for(int k = 97; k < tab.length + 96; k++){  //Affiche les lettres indiquant les colonnes 
+			System.out.print((char)k + " ");        //transformation des chiffre en lettre (autorisée par Mme Naert)
 		}
 		System.out.println((char)(tab.length + 96));
 		
