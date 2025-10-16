@@ -33,7 +33,13 @@ public class PlayerPointGestion {
 	/** Initialise le menu du jeu (choix taille grille / solo / duo / qui commence)
 	 * a executer apres le test unitaire
 	 */
-	void initGameMenu(){
+	int[] initGameMenu(){
+		int [] config = new int[4];
+		int lengthGrid, gameMode;
+		int firstPlayer = 0;
+		int difficulty = 0;
+		char SoloPlayerchoice = 'O';
+		
 		System.out.println("""
 						Welcome to
 			----------------------------------------------------------------
@@ -49,10 +55,31 @@ public class PlayerPointGestion {
 			----------------------------------------------------------------
 			""");
 		
-		lengthGrid = SimpleInput.getInt("Saisir la taille du plateau : ");
-		gameMode = SimpleInput.getInt("Saisir mode de jeu : 1.Solo / 2.Duo : ");
+		do {
+			lengthGrid = SimpleInput.getInt("Saisir la taille du plateau (entre 4 a 16) : ");
+		} while (lengthGrid < 4 && lengthGrid > 16); // on demande tant que lengthGrid n'est pas entre 4 et 16
+		
+		do {
+			gameMode = SimpleInput.getInt("Saisir mode de jeu : (1:Solo / 2:Duo) : ");
+		} while (gameMode != 1 && gameMode != 2); // on demande tant que game n'est pas 1 ou 2
+		
 		if (gameMode == 1){
-			//
+			
+			do {
+				SoloPlayerchoice = SimpleInput.getChar("Vous allez jouer contre un BOT, voulez-vous commencer a jouer? (O/n)");
+			} while (SoloPlayerchoice != 'O' && SoloPlayerchoice != 'o' && SoloPlayerchoice != 'N' && SoloPlayerchoice != 'n');
+			
+			if (SoloPlayerchoice == 'O' && SoloPlayerchoice == 'o') {
+				firstPlayer = 1; // le joueur joue les 'x'
+			} else {
+				firstPlayer = 2; // le joueur joue les 'o'
+			}
+			
+			do {
+			difficulty = SimpleInput.getInt("Difficulte du bot (1:Facile / 2:Difficile) : ");
+			} while (gameMode != 1 && gameMode != 2); // on demande tant que difficulty n'est pas 1 ou 2
+			
+		} else { // code a continuer pour le mode duo
 	}
 
 	/**
