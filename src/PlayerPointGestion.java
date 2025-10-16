@@ -25,9 +25,36 @@ public class PlayerPointGestion {
 		//removeHat();
 		//displayTab3d(grid);
 		
-		System.out.println(finJeu());
+		// System.out.println(finJeu());
+		
+		initGameMenu();
 	}
 	
+	/** Initialise le menu du jeu (choix taille grille / solo / duo / qui commence)
+	 * a executer apres le test unitaire
+	 */
+	void initGameMenu(){
+		System.out.println("""
+						Welcome to
+			----------------------------------------------------------------
+			 _______ _________          _______  _        _        _______ 
+			(  ___  )\\__   __/|\\     /|(  ____ \\( \\      ( \\      (  ___  )
+			| (   ) |   ) (   | )   ( || (    \\/| (      | (      | (   ) |
+			| |   | |   | |   | (___) || (__    | |      | |      | |   | |
+			| |   | |   | |   |  ___  ||  __)   | |      | |      | |   | |
+			| |   | |   | |   | (   ) || (      | |      | |      | |   | |
+			| (___) |   | |   | )   ( || (____/\\| (____/\\| (____/\\| (___) |
+			(_______)   )_(   |/     \\|(_______/(_______/(_______/(_______)
+																			
+			----------------------------------------------------------------
+			""");
+		
+		lengthGrid = SimpleInput.getInt("Saisir la taille du plateau : ");
+		gameMode = SimpleInput.getInt("Saisir mode de jeu : 1.Solo / 2.Duo : ");
+		if (gameMode == 1){
+			//
+	}
+
 	/**
 	 * Calcule les points des 2 joueurs (IA ou Humains) en parcourant la grille de jeu
 	 * @param int[][] grid : grille principale du jeu
