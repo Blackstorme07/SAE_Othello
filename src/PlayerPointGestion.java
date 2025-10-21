@@ -27,18 +27,22 @@ public class PlayerPointGestion {
 		
 		// System.out.println(finJeu());
 		
-		initGameMenu();
+		// displayTab(initGameMenu());
+		
+		displayTab3d(grid);
+		requestPiece();
 	}
 	
-	/** Initialise le menu du jeu (choix taille grille / solo / duo / qui commence)
+	/** Initialise le menu du jeu avec choix taille grille / solo / duo / qui commence
 	 * a executer apres le test unitaire
+	 * @return : tableau contenant la configuraton du jeu
+	 * @author S. GIRARDEAU
 	 */
 	int[] initGameMenu(){
-		int [] config = new int[4];
 		int lengthGrid, gameMode;
-		int firstPlayer = 0;
+		int StartPlayer = 0; // le joueur ne commence pas par defaut
 		int difficulty = 0;
-		char SoloPlayerchoice = 'O';
+		char PlayerChoice = 'O';
 		
 		System.out.println("""
 						Welcome to
@@ -57,7 +61,7 @@ public class PlayerPointGestion {
 		
 		do {
 			lengthGrid = SimpleInput.getInt("Saisir la taille du plateau (entre 4 a 16) : ");
-		} while (lengthGrid < 4 && lengthGrid > 16); // on demande tant que lengthGrid n'est pas entre 4 et 16
+		} while (lengthGrid < 4 || lengthGrid > 16); // on demande tant que lengthGrid n'est pas entre 4 et 16
 		
 		do {
 			gameMode = SimpleInput.getInt("Saisir mode de jeu : (1:Solo / 2:Duo) : ");
@@ -66,20 +70,19 @@ public class PlayerPointGestion {
 		if (gameMode == 1){
 			
 			do {
-				SoloPlayerchoice = SimpleInput.getChar("Vous allez jouer contre un BOT, voulez-vous commencer a jouer? (O/n)");
-			} while (SoloPlayerchoice != 'O' && SoloPlayerchoice != 'o' && SoloPlayerchoice != 'N' && SoloPlayerchoice != 'n');
-			
-			if (SoloPlayerchoice == 'O' && SoloPlayerchoice == 'o') {
-				firstPlayer = 1; // le joueur joue les 'x'
-			} else {
-				firstPlayer = 2; // le joueur joue les 'o'
+				PlayerChoice = SimpleInput.getChar("Vous allez jouer contre un BOT, voulez-vous commencer a jouer? (o/n) : ");
+			} while (PlayerChoice != 'O' && PlayerChoice != 'o' && PlayerChoice != 'N' && PlayerChoice != 'n');
+			if (PlayerChoice == 'O' || PlayerChoice == 'o') {
+				StartPlayer = 1; // le joueur joue les 'x'
 			}
 			
 			do {
 			difficulty = SimpleInput.getInt("Difficulte du bot (1:Facile / 2:Difficile) : ");
 			} while (gameMode != 1 && gameMode != 2); // on demande tant que difficulty n'est pas 1 ou 2
 			
-		} else { // code a continuer pour le mode duo
+		}
+		
+		return new int[] {lengthGrid, gameMode, StartPlayer, difficulty};
 	}
 
 	/**
@@ -162,6 +165,31 @@ public class PlayerPointGestion {
 		}
 		return end;
 	}
+	
+	/**
+	 * Demande les coordonnees de grille au joueur et les convertie en coordonnees de tableau (indices)
+	 * @return coords : tableau de coordonnees int [0]
+	 * @author S. GIRARDEAU
+	 */
+	void requestPiece() {
+		String request;
+		int i = -150;
+		int j = -150;
+		do {
+			request = SimpleInput.getString("Entrez les coordonnees sous la forme (chiffrelettre) (ex: 1a) : ");
+			if (request.length() == 2) {
+				i = ((int) request.charAt(0)) -49; // calcul de la veritable valeur de i
+				j = ((int) request.charAt(1)) -97; // calcul de la veritable valeur de j
+							
+			} else if (request.length() == 3 && request.charAt(0) == '1') {
+				i = ((int) request.charAt(1)) -49 + 10; // on prends en compte le cas ou le nombre depasse 9
+				j = ((int) request.charAt(2)) -97;
+			}
+				
+			System.out.println(i + " " + j);
+		} while (request.length() != 2 && request.length() != 3); // || grid[i][j] != '^' ajouter les conditions pour verifier que les nombres ne soit pas out of bound dans la grille
+	}
+	
 	
 	/**Affiche correctement le tableau
 	 * @param tab : le tableau a remplir
