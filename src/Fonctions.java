@@ -82,6 +82,8 @@ public class Fonctions{
 	 **/
 	boolean pieceEncadree(char[][] tab,int i,int j){
 		boolean resultat = false;
+		//Verification de toute les directions
+
 		if (pieceEncadreeDroite(tab, i, j)){
 			resultat = true;
 			
@@ -104,7 +106,6 @@ public class Fonctions{
 	}
 	
 	
-//Verification de toute les directions
 	/**
 	 * Verifie si il y a un pion adverse d'encadré par le placement d'un pion sur la case selectionnee (sur la droite de la case)
 	 * @param i, j : coordonnees de la case verifiee
@@ -277,11 +278,6 @@ public class Fonctions{
 	}
 
 
-
-
-
-
-
 	void displayTabBool (boolean[][] tab){
 		System.out.print("\033c"); //Vide la console
 		System.out.print("   ");
@@ -304,4 +300,344 @@ public class Fonctions{
 		}
 	}
 	
+	
+	
+	/**
+	 * renvoie une liste contenant le coup joué par le bot aléatoire
+	 * @param tab : le tableau à analyser
+	 * @return coupAleatoire : les coordonnées du coup à jouer ; indice 0 : i
+	 * 														   ; indice 1 : j
+	 **/
+	int[] coupBotRandom(char[][] tab){
+		int i,j;
+		do{
+			i = (int)(Math.random() * tab.length);
+			j = (int)(Math.random() * tab.length);
+		}while (tab[i][j] == '^');
+		int[] coupAleatoire = new int[2];
+		coupAleatoire[0] = i;
+		coupAleatoire[1] = j;
+		return  coupAleatoire;
+	}
+	
+	/**
+	 * renvoie une liste contenant le coup rapportant le plus de pointjoué par le bot 
+	 * @param tab : le tableau à analyser
+	 * @return coupAleatoire : les coordonnées du coup à jouer ; indice 0 : i
+	 * 														   ; indice 1 : j
+	 **/
+	int[] coupBotReflechi(char[][] tab){
+		int nombreCoupsAutorises = 0;
+		int[] coupReflechi = new int[2];
+		
+		//calcul du nombre de coups possibles
+		for(int i = 0; i < tab.length; i++){
+			for(int j = 0; j < tab.length; j++){
+				if (tab[i][j] =='^'){
+					nombreCoupsAutorises++;
+				}
+			} 
+		}
+		int[][] coupsAuthorise = new int[nombreCoupsAutorises][2];
+		int[] pointsRapportes = new int[nombreCoupsAutorises];
+
+		//calcul du nombre de points rapporté par chaque placement possibles
+		int i = 0;
+		for (int j = 0; i < tab.length; i++){
+			for (int k = 0; k < tab.length; j++){
+				if (tab[j][k] == '^'){
+					char[][] tabCopie = copieTableau(tab); //copie les tableau tab
+					coupsAuthorise[i][0] = j; //Enregistrement des indice correspondant au coup i
+					coupsAuthorise[i][1] = k;
+					pointsRapportes[i] = PlaceEtRetournePiece(tabCopie,coupsAuthorise[i]); //retournePiece renvoie le nombre de pièces retournées au coup i
+					
+					i++;
+				}
+			}
+		}
+		return coupsAuthorise[IndicePlusGrand(pointsRapportes)]; //Renvoie le couple de coordonnées (j,k) 
+
+	}
+	
+	/**
+	 * copie le tableau 
+	 * @param tab : le tableau à copier
+	 * @return tabCopie : copie du tableau
+	 **/
+	char[][] copieTableau(char[][] tab){
+		char[][] tabCopie = new char[tab.length][tab.length];
+		
+		//copie du tableau
+		for(int i = 0; i < tab.length; i++){
+			for(int j = 0; j < tab.length; j++){
+				tabCopie[i][j] = tab[i][j];
+			}
+		}
+		return tabCopie;
+	}
+	
+	
+	
+	/**
+	 * Calcule les points des 2 joueurs (IA ou Humains) en parcourant la grille de jeu
+	 * @param int[][] grid : grille principale du jeu
+	 * @return int[] pointsTab : tableau de 2 elements. - 1er element : score des pions 'x'
+	 * 													- 2eme element : score des pions 'o'
+	 * @author S. GIRARDEAU
+	 */
+	int[] pointsCalculation(char[][] grid){
+		int[] pointsTab = new int[2]; // tableau contenant le score des deux joueurs
+		for (int i = 0; i < grid.length; i++){
+			for (int j = 0; j < grid[i].length; j++) {
+				if (grid[i][j] == 'x') {
+					pointsTab[0]++; // si le pion trouve est un 'x' on incremente le premier element
+				} else if (grid[i][j] == 'o') {
+					pointsTab[1]++; // si le pion trouve est un 'o' on incremente le deuxieme element
+				}
+			}
+		}
+		return pointsTab;
+	}
+	
+	/**
+	 * Recherche le coup qui rapporte le plus de points
+	 * Si il y a plusieurs valeurs plus grande identiques, on en renvoie un aléatoirement
+	 * @param
+	 * @author Antoine CLERO
+	 */
+	int IndicePlusGrand(int[] tab){
+		int indiceARenvoyer;
+		int[] listeIndex = new int[tab.length];
+		int tampon = tab[0];
+		
+		//Recherche du nombre le plus grand
+		for(int i = 1; i < tab.length; i++){
+			if (tampon < tab[i]){
+				tampon = tab[i];
+			}
+		}
+		
+		//Recherche des indices qui corresppondent a la valeur la plus grande (car il peut y avoir plusieurs fois la meme valeur)
+		int j = 0;
+		for (int i = 0; i < tab.length; i++){
+			if (tab[i] == tampon){
+				listeIndex[j] = i;
+				j++;
+			}
+		}
+		
+		//Choix aléatoire parmi les indices
+		return listeIndex[(int) (Math.random() * (j-1))];
+		
+	}
+	/**
+	 * Place la piece correspondant au coordonnees saisie et retourne les pieces du plateau
+	 * @param int[][] grid : grille principale du jeu
+	 * @param int[] coordonnees : coordonnee de la piece a placer
+	 * @return pieceJoueur, pieceAdverse
+	 * @author Antoine CLERO
+	 */
+	int PlaceEtRetournePiece(char[][] plateau, int[] coordonnees){
+		int NombreDePointGagne = 0;
+		
+		//Placement de la pièce 
+		int i = coordonnees[0];
+		int j = coordonnees[1];
+		plateau[i][j] = pieceJoueur;
+		NombreDePointGagne++;
+		
+		//Retournemement des pieces
+		if (pieceEncadreeDroite(plateau, i, j)){
+			NombreDePointGagne += retournementDroite(plateau, i, j);
+		}
+		if (pieceEncadreeBas(plateau, i, j)){
+			NombreDePointGagne += retournementBas(plateau, i, j);
+		}
+		if (pieceEncadreeGauche(plateau, i, j)){
+			NombreDePointGagne += retournementGauche(plateau, i, j);
+		}
+		if (pieceEncadreeHaut(plateau, i, j)){
+			NombreDePointGagne += retournementHaut(plateau, i, j);
+		}
+		if (pieceEncadreeDroiteBas(plateau, i, j)){
+			NombreDePointGagne += retournementDroiteBas(plateau, i, j);
+		}
+		if (pieceEncadreeGaucheBas(plateau, i, j)){
+			NombreDePointGagne += retournementGaucheBas(plateau, i, j);
+		}
+		if (pieceEncadreeGaucheHaut(plateau, i, j)){
+			NombreDePointGagne += retournementGaucheHaut(plateau, i, j);
+		}
+		if (pieceEncadreeDroiteHaut(plateau, i, j)){
+			NombreDePointGagne += retournementDroiteHaut(plateau, i, j);
+		}
+		return NombreDePointGagne;
+	}
+	
+
+//Fonctions permettant de retourner les pieces dans toute les directions possibles
+
+	
+	
+	/**
+	 * Retourne les pions encadrés par le placement d'un pion sur la case selectionnee (sur la droite de la case)
+	 * @param i, j : coordonnees de la case verifiee
+	 * @param tab : plateau de jeu
+	 * @return nombrePieceEncadree : Le nombre de pions retournes
+	 **/
+	int retournementDroite(char[][] tab,int i,int j){
+		
+		int decalage = 1;
+		int nombrePieceEncadree = 0;
+		while (tab[i][j + decalage] == pieceAdverse) {
+			tab[i][j + decalage] = pieceJoueur;
+			decalage++;
+			nombrePieceEncadree ++;
+		}
+		System.out.println("1");
+		return nombrePieceEncadree;
+		}
+
+
+	/**
+	 * Retourne les pions encadrés par le placement d'un pion sur la case selectionnee (sur le dessous de la case)
+	 * @param i, j : coordonnees de la case verifiee
+	 * @param tab : plateau de jeu
+	 * @return nombrePieceEncadree : Le nombre de pions retournes
+	 **/
+	int retournementBas(char[][] tab,int i,int j){
+		
+		int decalage = 1;
+		int nombrePieceEncadree = 0;
+		while (tab[i + decalage][j] == pieceAdverse) {
+			tab[i + decalage][j] = pieceJoueur;
+			decalage++;
+			nombrePieceEncadree ++;
+		}
+		System.out.println("1");
+		return nombrePieceEncadree;
+		}
+
+
+	/**
+	 * Retourne les pions encadrés par le placement d'un pion sur la case selectionnee (sur la gauche de la case)
+	 * @param i, j : coordonnees de la case verifiee
+	 * @param tab : plateau de jeu
+	 * @return nombrePieceEncadree : Le nombre de pions retournes
+	 **/
+	int retournementGauche(char[][] tab,int i,int j){
+	
+		int decalage = 1;
+		int nombrePieceEncadree = 0;
+		while (tab[i][j - decalage] == pieceAdverse) {
+			tab[i][j - decalage] = pieceJoueur;
+			decalage++;
+			nombrePieceEncadree ++;
+		}
+		System.out.println("1");
+		return nombrePieceEncadree;
+		}
+
+
+	/**
+	 * Retourne les pions encadrés par le placement d'un pion sur la case selectionnee (sur le haut de la case)
+	 * @param i, j : coordonnees de la case verifiee
+	 * @param tab : plateau de jeu
+	 * @return nombrePieceEncadree : Le nombre de pions retournes
+	 **/
+	int retournementHaut(char[][] tab,int i,int j){
+
+		int decalage = 1;
+		int nombrePieceEncadree = 0;
+		while (tab[i - decalage][j] == pieceAdverse) {
+			tab[i - decalage][j] = pieceJoueur;
+			decalage++;
+			nombrePieceEncadree ++;
+		}
+		System.out.println("1");
+		return nombrePieceEncadree;
+		}
+
+	
+	/**
+	 * Retourne les pions encadrés par le placement d'un pion sur la case selectionnee (sur la diagonale droite-bas de la case)
+	 * @param i, j : coordonnees de la case verifiee
+	 * @param tab : plateau de jeu
+	 * @return nombrePieceEncadree : Le nombre de pions retournes
+	 **/
+	int retournementDroiteBas(char[][] tab,int i,int j){
+		
+		int decalage = 1;
+		int nombrePieceEncadree = 0;
+		while (tab[i + decalage][j + decalage] == pieceAdverse) {
+			tab[i + decalage][j ] = pieceJoueur;
+			decalage++;
+			nombrePieceEncadree ++;
+		}
+		System.out.println("1");
+		return nombrePieceEncadree;
+		}
+
+
+	/**
+	 * Retourne les pions encadrés par le placement d'un pion sur la case selectionnee (sur la diagonale gauche-bas de la case)
+	 * @param i, j : coordonnees de la case verifiee
+	 * @param tab : plateau de jeu
+	 * @return nombrePieceEncadree : Le nombre de pions retournes
+	 **/
+	int retournementGaucheBas(char[][] tab,int i,int j){
+
+		int decalage = 1;
+		int nombrePieceEncadree = 0;
+		while (tab[i + decalage][j - decalage] == pieceAdverse) {
+			tab[i + decalage][j - decalage] = pieceJoueur;
+			decalage++;
+			nombrePieceEncadree ++;
+		}
+		System.out.println("1");
+		return nombrePieceEncadree;
+		}
+
+
+	/**
+	 * Retourne les pions encadrés par le placement d'un pion sur la case selectionnee (sur la diagonale gauche-haut de la case)
+	 * @param i, j : coordonnees de la case verifiee
+	 * @param tab : plateau de jeu
+	 * @return nombrePieceEncadree : Le nombre de pions retournes
+	 **/
+	int retournementGaucheHaut(char[][] tab,int i,int j){
+
+		int decalage = 1;
+		int nombrePieceEncadree = 0;
+		while (tab[i - decalage][j - decalage] == pieceAdverse) {
+			tab[i - decalage][j - decalage] = pieceJoueur;
+			decalage++;
+			nombrePieceEncadree ++;
+		}
+		System.out.println("1");
+		return nombrePieceEncadree;
+		}
+
+
+	/**
+	 * Retourne les pions encadrés par le placement d'un pion sur la case selectionnee (sur la diagonale droite-haut de la case)
+	 * @param i, j : coordonnees de la case verifiee
+	 * @param tab : plateau de jeu
+	 * @return nombrePieceEncadree : Le nombre de pions retournes
+	 **/
+	int retournementDroiteHaut(char[][] tab,int i,int j){
+	
+		int decalage = 1;
+		int nombrePieceEncadree = 0;
+		while (tab[i - decalage][j + decalage] == pieceAdverse) {
+			tab[i - decalage][j + decalage] = pieceJoueur;
+			decalage++;
+			nombrePieceEncadree ++;
+		}
+		System.out.println("1");
+		return nombrePieceEncadree;
+		}
+
 }
+
+

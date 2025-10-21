@@ -41,6 +41,7 @@ public class Bot{
 	int[] coupBotReflechi(char[][] tab){
 		int nombreCoupsAutorises = 0;
 		int[] coupReflechi = new int[2];
+		
 		//calcul du nombre de coups possibles
 		for(int i = 0; i < tab.length; i++){
 			for(int j = 0; j < tab.length; j++){
@@ -55,16 +56,19 @@ public class Bot{
 		//calcul du nombre de points rapporté par chaque placement possibles
 		int i = 0;
 		for (int j = 0; i < tab.length; i++){
-			for (int j = 0; k < tab.length; j++){
+			for (int k = 0; k < tab.length; j++){
 				if (tab[j][k] == '^'){
-					char[][] tabCopie = copieTableau(tab) //copie les tableau tab
-					coupsAuthorise[i] = PlaceEtRetournePiece(tabCopie); //retournePiece renvoie le nombre de pièces retournées
+					char[][] tabCopie = copieTableau(tab); //copie les tableau tab
+					coupsAuthorise[i][0] = j; //Enregistrement des indice correspondant au coup i
+					coupsAuthorise[i][1] = k;
+					pointsRapportes[i] = PlaceEtRetournePiece(tabCopie,coupsAuthorise[i]); //retournePiece renvoie le nombre de pièces retournées au coup i
+					
 					i++;
 				}
 			}
 		}
-		coupsReflechi = IndicePlusGrand(coupsAuthorise);
-		return coupsReflechi;
+		return coupsAuthorise[IndicePlusGrand(pointsRapportes)]; //Renvoie le couple de coordonnées (j,k) 
+
 	}
 	
 	/**
@@ -107,6 +111,54 @@ public class Bot{
 		return pointsTab;
 	}
 	
+	/**
+	 * Recherche le coup qui rapporte le plus de points
+	 * Si il y a plusieurs valeurs plus grande identiques, on en renvoie un aléatoirement
+	 * @param
+	 * @author Antoine CLERO
+	 */
 	int IndicePlusGrand(int[] tab){
-		for(int i = 0; i < tab.length;; i++) 
-}//ne pas oublier que si la valeur la plus grande est presente plusieurs fois dans le tableau, renvoyer lun des indices aléatoirement
+		int indiceARenvoyer;
+		int[] listeIndex = new int[tab.length];
+		int tampon = tab[0];
+		
+		//Recherche du nombre le plus grand
+		for(int i = 1; i < tab.length; i++){
+			if (tampon < tab[i]){
+				tampon = tab[i];
+			}
+		}
+		
+		//Recherche des indices qui corresppondent a la valeur la plus grande (car il peut y avoir plusieurs fois la meme valeur)
+		int j = 0;
+		for (int i = 0; i < tab.length; i++){
+			if (tab[i] == tampon){
+				listeIndex[j] = i;
+				j++;
+			}
+		}
+		
+		//Choix aléatoire parmi les indices
+		return listeIndex[(int) (Math.random() * (j-1))];
+		
+	}
+	/**
+	 * Place la piece correspondant au coordonnees saisie et retourne les pieces du plateau
+	 * @param int[][] grid : grille principale du jeu
+	 * @param int[] coordonnees : coordonnee de la piece a placer
+	 * @return pieceJoueur, pieceAdverse
+	 * @author Antoine CLERO
+	 */
+	int PlaceEtRetournePiece(char[][] plateau, int[] coordonnees){
+		int NombreDePointGagne = 0;
+		
+		//Placement de la pièce 
+		plateau[coordonnees[0]][coordonnees[1]] = pieceJoueur;
+		NombreDePointGagne++;
+		
+		//Retournemement des pieces
+		if
+		
+		return NombreDePointGagne;
+	}
+}
