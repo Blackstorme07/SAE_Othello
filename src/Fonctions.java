@@ -4,37 +4,38 @@ public class Fonctions{
 	char pieceAdverse = 'x';
 	
 	
-	void principal(){
-		System.out.println(">>> DÉBUT DU PROGRAMME <<<");
-		int taille;
-		do {
-			taille = SimpleInput.getInt("Quelle taille voulez vous que le cote du plateau soit-il (4-6-8-10-12-16) ? ");
-		}while (taille % 2 !=0 || taille < 4 || taille > 16);
-		char[][] t = new char[taille][taille];
-		remplirTableau(t);
-		displayTab(t);
-		displayTabBool(authorizedLocation(t));
-	}
+	
 	/**Initialise le tableau à deux dimensions
 	 * @param tab : le tableau à remplir
+	 * @author Antoine CLERO
 	 **/
 	void remplirTableau(char[][] tab){
+		
+		//Chaque case du plateau est remplacee par le charactere ' '
 		for(int i = 0; i < tab.length; i++){
 			for (int j = 0; j < tab[i].length; j++){
 				tab[i][j] = ' ';
 			}
 		}
+		
 		//Placement des pions au centre du plateau au début de la partie
 		tab[(tab.length/2)-1][(tab.length/2)-1] = 'x';
 		tab[tab.length/2][tab.length/2] = 'x';
 		tab[(tab.length/2)-1][tab.length/2] = 'o';
 		tab[tab.length/2][(tab.length/2)-1] = 'o';
 	}
+	
 	/**Affiche correctement le tableau
 	 * @param tab : le tableau à remplir
+	 * @author Antoine CLERO
 	 **/
 	void displayTab (char[][] tab){
-		System.out.print("\033c"); //Vide la console
+
+		//Vide la console (ou fait comme si elle se vidais pour ne pas afficher le plateau du joueur precedent)
+		for (int i = 0; i < 25;i++){
+			System.out.println("/n");
+		}
+		
 		System.out.print("   ");
 		for(int k = 97; k < tab.length + 96; k++){  //Affiche les lettres indiquant les colonnes 
 			System.out.print((char)k + " ");        //transformation des chiffre en lettre (autorisée par Mme Naert)
@@ -60,18 +61,19 @@ public class Fonctions{
 	/**Verifie quelle sont les cases sur lesquel le joueur peut jouer
 	 * @param tab : tableau à deux dimensions dans lequel il faut verifier toute les cases
 	 * @return coupsAuthorise : liste des coups autorises
+	 * @author Antoine CLERO
 	 **/
 	boolean[][] authorizedLocation(char[][] tab){
-		boolean[][] coupsAuthorise = new boolean[tab.length][tab.length];
+		boolean[][] coupsAutorise = new boolean[tab.length][tab.length];
 		int k = 0;
 		for(int i = 0; i < tab.length; i++){
 			for (int j = 0; j < tab.length; j++){
 				if (tab[i][j] == ' ') {
-					coupsAuthorise[i][j] = pieceEncadree(tab, i, j);
+					coupsAutorise[i][j] = pieceEncadree(tab, i, j); //Si la case est valide, la case est mise en true
 				}
 			}
 		}
-		return coupsAuthorise;
+		return coupsAutorise;
 	}
 
 	/**
@@ -79,6 +81,7 @@ public class Fonctions{
 	 * @param i, j : coordonnees de la case verifiee
 	 * @param tab : plateau de jeu
 	 * @return resultat : true si au moins une pièce adverse est encadree, false sinon
+	 * @author Antoine CLERO
 	 **/
 	boolean pieceEncadree(char[][] tab,int i,int j){
 		boolean resultat = false;
@@ -105,12 +108,15 @@ public class Fonctions{
 		return resultat;
 	}
 	
-	
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Verification si une piece serait encadre par le placement de la piece dans une direction specifique
 	/**
 	 * Verifie si il y a un pion adverse d'encadré par le placement d'un pion sur la case selectionnee (sur la droite de la case)
 	 * @param i, j : coordonnees de la case verifiee
 	 * @param tab : plateau de jeu
 	 * @return true si au moins une pièce adverse est encadree, false sinon
+	 * @author Antoine CLERO
 	 **/
 	boolean pieceEncadreeDroite(char[][] tab,int i,int j){
 		int decalage = 1;
@@ -132,6 +138,7 @@ public class Fonctions{
 	 * @param i, j : coordonnees de la case verifiee
 	 * @param tab : plateau de jeu
 	 * @return true si au moins une pièce adverse est encadree, false sinon
+	 * @author Antoine CLERO
 	 **/
 	boolean pieceEncadreeBas(char[][] tab,int i,int j){
 		int decalage = 1;
@@ -154,6 +161,7 @@ public class Fonctions{
 	 * @param i, j : coordonnees de la case verifiee
 	 * @param tab : plateau de jeu
 	 * @return true si au moins une pièce adverse est encadree, false sinon
+	 * @author Antoine CLERO
 	 **/
 	boolean pieceEncadreeGauche(char[][] tab,int i,int j){
 		int decalage = 1;
@@ -176,6 +184,7 @@ public class Fonctions{
 	 * @param i, j : coordonnees de la case verifiee
 	 * @param tab : plateau de jeu
 	 * @return true si au moins une pièce adverse est encadree, false sinon
+	 * @author Antoine CLERO
 	 **/
 	boolean pieceEncadreeHaut(char[][] tab,int i,int j){
 		int decalage = 1;
@@ -198,6 +207,7 @@ public class Fonctions{
 	 * @param i, j : coordonnees de la case verifiee
 	 * @param tab : plateau de jeu
 	 * @return true si au moins une pièce adverse est encadree, false sinon
+	 * @author Antoine CLERO
 	 **/
 	boolean pieceEncadreeDroiteBas(char[][] tab,int i,int j){
 		int decalage = 1;
@@ -219,6 +229,7 @@ public class Fonctions{
 	 * @param i, j : coordonnees de la case verifiee
 	 * @param tab : plateau de jeu
 	 * @return true si au moins une pièce adverse est encadree, false sinon
+	 * @author Antoine CLERO
 	 **/
 	boolean pieceEncadreeGaucheBas(char[][] tab,int i,int j){
 		int decalage = 1;
@@ -240,6 +251,7 @@ public class Fonctions{
 	 * @param i, j : coordonnees de la case verifiee
 	 * @param tab : plateau de jeu
 	 * @return true si au moins une pièce adverse est encadree, false sinon
+	 * @author Antoine CLERO
 	 **/
 	boolean pieceEncadreeGaucheHaut(char[][] tab,int i,int j){
 		int decalage = 1;
@@ -261,6 +273,7 @@ public class Fonctions{
 	 * @param i, j : coordonnees de la case verifiee
 	 * @param tab : plateau de jeu
 	 * @return true si au moins une pièce adverse est encadree, false sinon
+	 * @author Antoine CLERO
 	 **/
 	boolean pieceEncadreeDroiteHaut(char[][] tab,int i,int j){
 		int decalage = 1;
@@ -277,28 +290,9 @@ public class Fonctions{
 		return (nombrePieceEncadree != 0 && piecePositionIJ == pieceJoueur );
 	}
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void displayTabBool (boolean[][] tab){
-		System.out.print("\033c"); //Vide la console
-		System.out.print("   ");
-		for(int k = 97; k < tab.length + 96; k++){  //Affiche les lettres indiquant les colonnes 
-			System.out.print((char)k + " ");        //transformation des chiffre en lettre (autorisée par Mme Naert)
-		}
-		System.out.println((char)(tab.length + 96));
-		
-		for(int i = 0; i < tab.length; i++){
-			if (i < 9){
-				System.out.print(" " + (i + 1) + " "); //Affiche les nombres indiquant les lignes
-			}else{
-				System.out.print((i + 1)+ " ");
-			}
-			for (int j = 0; j < tab[i].length-1; j++){
-				System.out.print (tab[i][j]);       //Affichage du plateau
-				System.out.print('|');
-			}
-			System.out.println(tab[i][tab[i].length-1]);
-		}
-	}
+	
 	
 	
 	
@@ -307,6 +301,7 @@ public class Fonctions{
 	 * @param tab : le tableau à analyser
 	 * @return coupAleatoire : les coordonnées du coup à jouer ; indice 0 : i
 	 * 														   ; indice 1 : j
+	 * @author Antoine CLERO
 	 **/
 	int[] coupBotRandom(char[][] tab){
 		int i,j;
@@ -325,6 +320,7 @@ public class Fonctions{
 	 * @param tab : le tableau à analyser
 	 * @return coupAleatoire : les coordonnées du coup à jouer ; indice 0 : i
 	 * 														   ; indice 1 : j
+	 * @author Antoine CLERO
 	 **/
 	int[] coupBotReflechi(char[][] tab){
 		int nombreCoupsAutorises = 0;
@@ -338,7 +334,10 @@ public class Fonctions{
 				}
 			} 
 		}
-		int[][] coupsAuthorise = new int[nombreCoupsAutorises][2];
+		
+		///Creation des listes qui compte le nombre de points rapporte (pointsRapportes) avec le placement de la piece a certaine coordonnee (coupsAutorise)
+		///En lisant le tableau de droite a gauche et de heut en bas, l'indice 0 correspond au premier coup autorise, l'indice 1 au deuxieme coup autorise, etc
+		int[][] coupsAutorise = new int[nombreCoupsAutorises][2];
 		int[] pointsRapportes = new int[nombreCoupsAutorises];
 
 		//calcul du nombre de points rapporté par chaque placement possibles
@@ -347,15 +346,15 @@ public class Fonctions{
 			for (int k = 0; k < tab.length; j++){
 				if (tab[j][k] == '^'){
 					char[][] tabCopie = copieTableau(tab); //copie les tableau tab
-					coupsAuthorise[i][0] = j; //Enregistrement des indice correspondant au coup i
-					coupsAuthorise[i][1] = k;
-					pointsRapportes[i] = PlaceEtRetournePiece(tabCopie,coupsAuthorise[i]); //retournePiece renvoie le nombre de pièces retournées au coup i
+					coupsAutorise[i][0] = j; //Enregistrement des indice correspondant au coup i
+					coupsAutorise[i][1] = k;
+					pointsRapportes[i] = PlaceEtRetournePiece(tabCopie,coupsAutorise[i]); //retournePiece renvoie le nombre de pièces retournées au coup i
 					
 					i++;
 				}
 			}
 		}
-		return coupsAuthorise[IndicePlusGrand(pointsRapportes)]; //Renvoie le couple de coordonnées (j,k) 
+		return coupsAutorise[IndicePlusGrand(pointsRapportes)]; //Renvoie le couple de coordonnées (j,k) 
 
 	}
 	
@@ -363,6 +362,7 @@ public class Fonctions{
 	 * copie le tableau 
 	 * @param tab : le tableau à copier
 	 * @return tabCopie : copie du tableau
+	 * @author Antoine CLERO
 	 **/
 	char[][] copieTableau(char[][] tab){
 		char[][] tabCopie = new char[tab.length][tab.length];
@@ -400,9 +400,10 @@ public class Fonctions{
 	}
 	
 	/**
-	 * Recherche le coup qui rapporte le plus de points
+	 * Recherche l'indice de la plus grande valeur dans une liste
 	 * Si il y a plusieurs valeurs plus grande identiques, on en renvoie un aléatoirement
-	 * @param
+	 * @param tab : tableau d'entier a etudier
+	 * @return l'un des indices du nombre le plus grand  
 	 * @author Antoine CLERO
 	 */
 	int IndicePlusGrand(int[] tab){
@@ -430,6 +431,8 @@ public class Fonctions{
 		return listeIndex[(int) (Math.random() * (j-1))];
 		
 	}
+	
+	
 	/**
 	 * Place la piece correspondant au coordonnees saisie et retourne les pieces du plateau
 	 * @param int[][] grid : grille principale du jeu
@@ -446,7 +449,7 @@ public class Fonctions{
 		plateau[i][j] = pieceJoueur;
 		NombreDePointGagne++;
 		
-		//Retournemement des pieces
+		//Retournemement des pieces dans toute les directions
 		if (pieceEncadreeDroite(plateau, i, j)){
 			NombreDePointGagne += retournementDroite(plateau, i, j);
 		}
@@ -474,7 +477,8 @@ public class Fonctions{
 		return NombreDePointGagne;
 	}
 	
-
+	
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Fonctions permettant de retourner les pieces dans toute les directions possibles
 
 	
@@ -484,6 +488,7 @@ public class Fonctions{
 	 * @param i, j : coordonnees de la case verifiee
 	 * @param tab : plateau de jeu
 	 * @return nombrePieceEncadree : Le nombre de pions retournes
+	 * @author Antoine CLERO
 	 **/
 	int retournementDroite(char[][] tab,int i,int j){
 		
@@ -504,6 +509,7 @@ public class Fonctions{
 	 * @param i, j : coordonnees de la case verifiee
 	 * @param tab : plateau de jeu
 	 * @return nombrePieceEncadree : Le nombre de pions retournes
+	 * @author Antoine CLERO
 	 **/
 	int retournementBas(char[][] tab,int i,int j){
 		
@@ -524,6 +530,7 @@ public class Fonctions{
 	 * @param i, j : coordonnees de la case verifiee
 	 * @param tab : plateau de jeu
 	 * @return nombrePieceEncadree : Le nombre de pions retournes
+	 * @author Antoine CLERO
 	 **/
 	int retournementGauche(char[][] tab,int i,int j){
 	
@@ -544,6 +551,7 @@ public class Fonctions{
 	 * @param i, j : coordonnees de la case verifiee
 	 * @param tab : plateau de jeu
 	 * @return nombrePieceEncadree : Le nombre de pions retournes
+	 * @author Antoine CLERO
 	 **/
 	int retournementHaut(char[][] tab,int i,int j){
 
@@ -564,6 +572,7 @@ public class Fonctions{
 	 * @param i, j : coordonnees de la case verifiee
 	 * @param tab : plateau de jeu
 	 * @return nombrePieceEncadree : Le nombre de pions retournes
+	 * @author Antoine CLERO
 	 **/
 	int retournementDroiteBas(char[][] tab,int i,int j){
 		
@@ -584,6 +593,7 @@ public class Fonctions{
 	 * @param i, j : coordonnees de la case verifiee
 	 * @param tab : plateau de jeu
 	 * @return nombrePieceEncadree : Le nombre de pions retournes
+	 * @author Antoine CLERO
 	 **/
 	int retournementGaucheBas(char[][] tab,int i,int j){
 
@@ -604,6 +614,7 @@ public class Fonctions{
 	 * @param i, j : coordonnees de la case verifiee
 	 * @param tab : plateau de jeu
 	 * @return nombrePieceEncadree : Le nombre de pions retournes
+	 * @author Antoine CLERO
 	 **/
 	int retournementGaucheHaut(char[][] tab,int i,int j){
 
@@ -624,6 +635,7 @@ public class Fonctions{
 	 * @param i, j : coordonnees de la case verifiee
 	 * @param tab : plateau de jeu
 	 * @return nombrePieceEncadree : Le nombre de pions retournes
+	 * @author Antoine CLERO
 	 **/
 	int retournementDroiteHaut(char[][] tab,int i,int j){
 	
@@ -638,6 +650,35 @@ public class Fonctions{
 		return nombrePieceEncadree;
 		}
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+
+
+
+
+///Fonction de test a EFFACER
+	void displayTabBool (boolean[][] tab){
+			System.out.print("\033c"); //Vide la console
+			System.out.print("   ");
+			for(int k = 97; k < tab.length + 96; k++){  //Affiche les lettres indiquant les colonnes 
+				System.out.print((char)k + " ");        //transformation des chiffre en lettre (autorisée par Mme Naert)
+			}
+			System.out.println((char)(tab.length + 96));
+			
+			for(int i = 0; i < tab.length; i++){
+				if (i < 9){
+					System.out.print(" " + (i + 1) + " "); //Affiche les nombres indiquant les lignes
+				}else{
+					System.out.print((i + 1)+ " ");
+				}
+				for (int j = 0; j < tab[i].length-1; j++){
+					System.out.print (tab[i][j]);       //Affichage du plateau
+					System.out.print('|');
+				}
+				System.out.println(tab[i][tab[i].length-1]);
+			}
+		}
 }
 
 
