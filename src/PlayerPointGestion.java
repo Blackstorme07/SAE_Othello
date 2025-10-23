@@ -19,18 +19,7 @@ public class PlayerPointGestion {
 	boolean[][] falseTab = new boolean[4][4];
 	
 	void principal(){
-		//displayTab3d(grid);
-		//addHat();
-		//displayTab3d(grid);
-		//removeHat();
-		//displayTab3d(grid);
-		
-		// System.out.println(finJeu());
-		
-		// displayTab(initGameMenu());
-		
-		displayTab3d(grid);
-		requestPiece();
+		testPointsCalculation();
 	}
 	
 	/** Initialise le menu du jeu avec choix taille grille / solo / duo / qui commence
@@ -104,6 +93,68 @@ public class PlayerPointGestion {
 			}
 		}
 		return pointsTab;
+	}
+	
+	/**
+	 * Teste la methode pointsCalculation()
+	 */
+	void testPointsCalculation() {
+		System.out.println();
+		System.out.println("*** pointsCalculation()");
+		
+		char[][] test1 = {
+			{'x', ' ', ' ', ' '},
+			{' ', 'x', 'o', ' '},
+			{' ', 'o', 'x', ' '},
+			{' ', ' ', ' ', ' '}
+		};
+		
+		char[][] test2 = {
+			{'x', 'x', 'x', 'x'},
+			{'o', 'x', 'o', 'o'},
+			{'o', 'o', 'x', 'o'},
+			{'x', 'x', 'o', 'o'}
+		};
+		
+		char[][] test3 = {
+			{' ', ' ', ' ', ' '},
+			{' ', ' ', ' ', ' '},
+			{' ', ' ', ' ', ' '},
+			{' ', ' ', ' ', ' '}
+		};
+		
+		int[] result1 = {3, 2};
+		int[] result2 = {8, 8};
+		int[] result3 = {0, 0};
+		
+		
+		testCasPointsCalculation(test1, result1);
+		testCasPointsCalculation(test2, result2);
+		testCasPointsCalculation(test3, result3);
+	}
+	
+	/**
+	 * teste un appel de pointsCalculation
+	 * @param grid : grille du jeu
+	 * @param result resultat attendu
+	 */
+	void testCasPointsCalculation(char[][] grid, int[] result) {
+		// Affichage
+		System.out.println("pointsCalculation("); 
+		displayTab3d(grid); 
+		System.out.print("resultat = ");
+		displayTab(result);
+		System.out.print("\t : ");
+	 
+		//Appel
+		int[] resExec = pointsCalculation(grid);
+	
+		// Verification
+		if (resExec[0] == result[0] && resExec[1] == result[1]) {
+			System.out.println("OK");
+		} else {
+			System.err.println("ERREUR");
+		}
 	}
 	
 	/**
@@ -187,7 +238,7 @@ public class PlayerPointGestion {
 			}
 				
 			System.out.println(i + " " + j);
-		} while (request.length() != 2 && request.length() != 3); // || grid[i][j] != '^' ajouter les conditions pour verifier que les nombres ne soit pas out of bound dans la grille
+		} while (request.length() != 2 && request.length() != 3 || i < 0 || i >= grid.length || j < 0 || j >= grid.length || grid[i][j] != '^'); // || grid[i][j] != '^' ajouter les conditions pour verifier que les nombres ne soit pas out of bound dans la grille
 	}
 	
 	
