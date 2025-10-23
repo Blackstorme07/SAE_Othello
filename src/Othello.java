@@ -16,29 +16,38 @@ class Othello {
 		SimpleInput.getString("entrer une chaine de caractere pour commencer a jouer : ");
 		int[] config = initGameMenu();
 		grid = new char[config[0]][config[0]];
+		remplirTableau();
 		int gameMode = config[1];  // 1 solo 2 duo
 		int botCommence = config[2];  //0 bot commence
 		int difficulteeBot = config[3];
-		
-		while (!finJeu()){
+		int[] coup;
+		while (!finJeu()){ 
 			addHat();
+			System.out.println("addHat !");
+
 			showGrid();
 			if (gameMode == 1 && nombreDeTour % 2 == botCommence){
+				System.out.println("Bot !");
+
 				if (difficulteeBot == 1){
-					coupBotRandom();
+					coup = coupBotRandom();
 				}
 				else{
-					coupBotReflechi();
+					coup = coupBotReflechi();
 				}
 			}
 			else{
-				int[] coup = requestPiece();
-				placeEtRetournePiece(grid, coup);
-				switchPlayer();
+				coup = requestPiece();
+							
+
 			}
+			placeEtRetournePiece(grid, coup);
+
+			switchPlayer();
+			System.out.println("switchPlayer !");
 			removeHat();
+			System.out.println("removeHat !");
 			nombreDeTour++;
-			
 		}
 		
 		int pointsO = pointsCalculation(grid)[1];
@@ -160,8 +169,10 @@ class Othello {
 
 		//Vide la console (ou fait comme si elle se vidais pour ne pas afficher le plateau du joueur precedent)
 		for (int i = 0; i < 25;i++){
-			System.out.println("/n");
+			System.out.println("\n");
 		}
+		
+		System.out.println("Au tour des " + pieceJoueur);
 		
 		System.out.print("   ");
 		for(int k = 97; k < grid.length + 96; k++){  //Affiche les lettres indiquant les colonnes 
@@ -208,25 +219,34 @@ class Othello {
 	 **/
 	boolean pieceEncadree(int i,int j){
 		boolean resultat = false;
+		System.out.println("i " + i + "j " + j);
 		//Verification de toute les directions
 
 		if (pieceEncadreeDroite(i, j)){
 			resultat = true;
+			System.out.println(resultat);
 			
 		}else if (pieceEncadreeBas(i, j)){
 			resultat = true;
+			System.out.println(resultat);
 		}else if (pieceEncadreeGauche(i, j)){
 			resultat = true;
+			System.out.println(resultat);
 		}else if (pieceEncadreeHaut(i, j)){
 			resultat = true;
+			System.out.println(resultat);
 		}else if (pieceEncadreeDroiteBas(i, j)){
 			resultat = true;
+			System.out.println(resultat);
 		}else if (pieceEncadreeGaucheBas(i, j)){
 			resultat = true;
+			System.out.println(resultat);
 		}else if (pieceEncadreeGaucheHaut(i, j)){
 			resultat = true;
+			System.out.println(resultat);
 		}else if (pieceEncadreeDroiteHaut(i, j)){
 			resultat = true;
+			System.out.println(resultat);
 		}
 		return resultat;
 	}
@@ -246,12 +266,12 @@ class Othello {
 		char piecePositionIJ = pieceAdverse;
 		while (j + decalage < grid.length && piecePositionIJ == pieceAdverse) {
 			if (grid[i][j + decalage] == pieceAdverse){
-				decalage++;
 				nombrePieceEncadree ++;
 			}
 			piecePositionIJ = grid[i][j + decalage];
+			decalage++;
 		}
-		System.out.println("1");
+		System.out.println("OKKKK");
 		return (nombrePieceEncadree != 0 && piecePositionIJ == pieceJoueur );
 	}
 	
@@ -267,10 +287,10 @@ class Othello {
 		char piecePositionIJ = pieceAdverse;
 		while (i + decalage < grid.length && piecePositionIJ == pieceAdverse) {
 			if (grid[i + decalage][j] == pieceAdverse){
-				decalage++;
 				nombrePieceEncadree ++;
 			}
 			piecePositionIJ = grid[i + decalage][j];
+			decalage++;
 		}
 		System.out.println("2");
 
@@ -287,12 +307,12 @@ class Othello {
 		int decalage = 1;
 		int nombrePieceEncadree = 0;
 		char piecePositionIJ = pieceAdverse;
-		while (j - decalage >= 0 && piecePositionIJ == pieceAdverse) {
+		while (j - decalage > 0 && piecePositionIJ == pieceAdverse) {
 			if (grid[i][j - decalage] == pieceAdverse){
-				decalage++;
 				nombrePieceEncadree ++;
 			}
 			piecePositionIJ = grid[i][j - decalage];
+			decalage++;
 		}
 		System.out.println("3");
 
@@ -309,12 +329,12 @@ class Othello {
 		int decalage = 1;
 		int nombrePieceEncadree = 0;
 		char piecePositionIJ = pieceAdverse;
-		while (i - decalage >= 0 && piecePositionIJ == pieceAdverse) {
+		while (i - decalage > 0 && piecePositionIJ == pieceAdverse) {
 			if (grid[i - decalage][j] == pieceAdverse){
-				decalage++;
 				nombrePieceEncadree ++;
 			}
 			piecePositionIJ = grid[i - decalage][j];
+			decalage++;
 		}
 		System.out.println("4");
 
@@ -333,10 +353,12 @@ class Othello {
 		char piecePositionIJ = pieceAdverse;
 		while (j + decalage < grid.length && i + decalage < grid.length && piecePositionIJ == pieceAdverse) {
 			if (grid[i + decalage][j + decalage] == pieceAdverse){
-				decalage++;
 				nombrePieceEncadree ++;
+
 			}
 			piecePositionIJ = grid[i + decalage][j + decalage];
+			decalage++;
+
 		}
 		System.out.println("5");
 		return (nombrePieceEncadree != 0 && piecePositionIJ == pieceJoueur );
@@ -353,12 +375,13 @@ class Othello {
 		int decalage = 1;
 		int nombrePieceEncadree = 0;
 		char piecePositionIJ = pieceAdverse;
-		while (i + decalage < grid.length && j - decalage >= 0 && piecePositionIJ == pieceAdverse) {
+		while (i + decalage < grid.length && j - decalage > 0 && piecePositionIJ == pieceAdverse) {
 			if (grid[i + decalage][j - decalage] == pieceAdverse){
-				decalage++;
 				nombrePieceEncadree ++;
 			}
 			piecePositionIJ = grid[i + decalage][j - decalage];
+			decalage++;
+
 		}
 		System.out.println("6");
 		return (nombrePieceEncadree != 0 && piecePositionIJ == pieceJoueur );
@@ -374,12 +397,12 @@ class Othello {
 		int decalage = 1;
 		int nombrePieceEncadree = 0;
 		char piecePositionIJ = pieceAdverse;
-		while (i - decalage >= 0 && j - decalage >= 0 && piecePositionIJ == pieceAdverse) {
+		while (i - decalage > 0 && j - decalage > 0 && piecePositionIJ == pieceAdverse) {
 			if (grid[i - decalage][j - decalage] == pieceAdverse){
-				decalage++;
 				nombrePieceEncadree ++;
 			}
 			piecePositionIJ = grid[i - decalage][j - decalage];
+			decalage++;
 		}
 		System.out.println("7");
 		return (nombrePieceEncadree != 0 && piecePositionIJ == pieceJoueur );
@@ -395,12 +418,12 @@ class Othello {
 		int decalage = 1;
 		int nombrePieceEncadree = 0;
 		char piecePositionIJ = pieceAdverse;
-		while (i - decalage >= 0 && j + decalage < grid.length && piecePositionIJ == pieceAdverse) {
+		while (i - decalage > 0 && j + decalage < grid.length && piecePositionIJ == pieceAdverse) {
 			if (grid[i - decalage][j + decalage] == pieceAdverse){
-				decalage++;
 				nombrePieceEncadree ++;
 			}
 			piecePositionIJ = grid[i - decalage][j + decalage];
+			decalage++;
 		}
 		System.out.println("8");
 		return (nombrePieceEncadree != 0 && piecePositionIJ == pieceJoueur );
@@ -424,7 +447,7 @@ class Othello {
 		int[] coupAleatoire = new int[2];
 		coupAleatoire[0] = i;
 		coupAleatoire[1] = j;
-		return  coupAleatoire;
+		return coupAleatoire;
 	}
 
 	/**
@@ -529,7 +552,8 @@ class Othello {
 	 */
 	int placeEtRetournePiece(char[][] grid, int[] coordonnees){
 		int NombreDePointGagne = 0;
-		
+		displayTabTestUnitaire(grid);
+
 		//Placement de la piece 
 		int i = coordonnees[0];
 		int j = coordonnees[1];
@@ -660,7 +684,7 @@ class Othello {
 		int decalage = 1;
 		int nombrePieceEncadree = 0;
 		while (grid[i + decalage][j + decalage] == pieceAdverse) {
-			grid[i + decalage][j ] = pieceJoueur;
+			grid[i + decalage][j+ decalage] = pieceJoueur;
 			decalage++;
 			nombrePieceEncadree ++;
 		}
@@ -890,15 +914,18 @@ class Othello {
 	 * @author S. GIRARDEAU
 	 */ 
 	boolean finJeu() {
-		boolean[][] allowedCoup = authorizedLocation();
 		boolean end = true;
-		
-		for(int i = 0; i < allowedCoup.length; i++){
-			for(int j = 0; j < allowedCoup[i].length; j++){
-				if (allowedCoup[i][j] == true) {
-					end = false;
+		for (int d = 0; d < 2; d++){
+			boolean[][] allowedCoup = authorizedLocation();
+			for(int i = 0; i < allowedCoup.length; i++){
+				for(int j = 0; j < allowedCoup[i].length; j++){
+					if (allowedCoup[i][j] == true) {
+						end = false;
+					}
 				}
 			}
+			switchPlayer();
+			System.out.println("finJeu");
 		}
 		return end;
 	}
