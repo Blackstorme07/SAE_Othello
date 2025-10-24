@@ -23,33 +23,34 @@ class Othello {
 		int[] coup;
 		while (!finJeu()){ 
 			addHat();
-			System.out.println("addHat !");
 
 			showGrid();
 			if (gameMode == 1 && nombreDeTour % 2 == botCommence){
-				System.out.println("Bot !");
+				if (peutJouer()){
+					if (difficulteeBot == 1){
+						coup = coupBotRandom();
+						placeEtRetournePiece(grid, coup);
 
-				if (difficulteeBot == 1){
-					coup = coupBotRandom();
-				}
-				else{
-					coup = coupBotReflechi();
+					}
+					else{
+						coup = coupBotReflechi();
+						placeEtRetournePiece(grid, coup);
+					}
 				}
 			}
 			else{
-				coup = requestPiece();
-							
+				if (peutJouer()){
+					coup = requestPiece();
+					placeEtRetournePiece(grid, coup);
+				}
 
 			}
-			placeEtRetournePiece(grid, coup);
 
 			switchPlayer();
-			System.out.println("switchPlayer !");
 			removeHat();
-			System.out.println("removeHat !");
 			nombreDeTour++;
 		}
-		
+		showGrid();
 		int pointsO = pointsCalculation(grid)[1];
 		int pointsX = pointsCalculation(grid)[0];
 		if (pointsO > pointsX) {
@@ -204,7 +205,7 @@ class Othello {
 		for(int i = 0; i < grid.length; i++){
 			for (int j = 0; j < grid.length; j++){
 				if (grid[i][j] == ' ') {
-					coupsAutorise[i][j] = pieceEncadree(i, j); //Si la case est valide, la case est mise en true
+					coupsAutorise[i][j] = pieceEncadree(grid, i, j); //Si la case est valide, la case est mise en true
 				}
 			}
 		}
@@ -217,36 +218,27 @@ class Othello {
 	 * @return resultat : true si au moins une piece adverse est encadree, false sinon
 	 * @author Antoine CLERO
 	 **/
-	boolean pieceEncadree(int i,int j){
+	boolean pieceEncadree(char[][] tab, int i,int j){
 		boolean resultat = false;
-		System.out.println("i " + i + "j " + j);
 		//Verification de toute les directions
 
-		if (pieceEncadreeDroite(i, j)){
+		if (pieceEncadreeDroite(tab, i, j)){
 			resultat = true;
-			System.out.println(resultat);
 			
-		}else if (pieceEncadreeBas(i, j)){
+		}else if (pieceEncadreeBas(tab, i, j)){
 			resultat = true;
-			System.out.println(resultat);
-		}else if (pieceEncadreeGauche(i, j)){
+		}else if (pieceEncadreeGauche(tab, i, j)){
 			resultat = true;
-			System.out.println(resultat);
-		}else if (pieceEncadreeHaut(i, j)){
+		}else if (pieceEncadreeHaut(tab, i, j)){
 			resultat = true;
-			System.out.println(resultat);
-		}else if (pieceEncadreeDroiteBas(i, j)){
+		}else if (pieceEncadreeDroiteBas(tab, i, j)){
 			resultat = true;
-			System.out.println(resultat);
-		}else if (pieceEncadreeGaucheBas(i, j)){
+		}else if (pieceEncadreeGaucheBas(tab, i, j)){
 			resultat = true;
-			System.out.println(resultat);
-		}else if (pieceEncadreeGaucheHaut(i, j)){
+		}else if (pieceEncadreeGaucheHaut(tab, i, j)){
 			resultat = true;
-			System.out.println(resultat);
-		}else if (pieceEncadreeDroiteHaut(i, j)){
+		}else if (pieceEncadreeDroiteHaut(tab, i, j)){
 			resultat = true;
-			System.out.println(resultat);
 		}
 		return resultat;
 	}
@@ -260,18 +252,19 @@ class Othello {
 	 * @return true si au moins une piece adverse est encadree, false sinon
 	 * @author Antoine CLERO
 	 **/
-	boolean pieceEncadreeDroite(int i,int j){
+	boolean pieceEncadreeDroite(char[][] tab, int i,int j){
 		int decalage = 1;
 		int nombrePieceEncadree = 0;
 		char piecePositionIJ = pieceAdverse;
-		while (j + decalage < grid.length && piecePositionIJ == pieceAdverse) {
-			if (grid[i][j + decalage] == pieceAdverse){
+		while (j + decalage < tab.length && piecePositionIJ == pieceAdverse) {
+			if (tab[i][j + decalage] == pieceAdverse){
 				nombrePieceEncadree ++;
 			}
-			piecePositionIJ = grid[i][j + decalage];
+			piecePositionIJ = tab[i][j + decalage];
 			decalage++;
 		}
-		System.out.println("OKKKK");
+		  System.out.println(" i : " + i + " j : " + j);
+		  System.out.println("pieceEncadreeDroite : " + (piecePositionIJ == pieceJoueur));
 		return (nombrePieceEncadree != 0 && piecePositionIJ == pieceJoueur );
 	}
 	
@@ -281,19 +274,19 @@ class Othello {
 	 * @return true si au moins une piece adverse est encadree, false sinon
 	 * @author Antoine CLERO
 	 **/
-	boolean pieceEncadreeBas(int i,int j){
+	boolean pieceEncadreeBas(char[][] tab, int i,int j){
 		int decalage = 1;
 		int nombrePieceEncadree = 0;
 		char piecePositionIJ = pieceAdverse;
-		while (i + decalage < grid.length && piecePositionIJ == pieceAdverse) {
-			if (grid[i + decalage][j] == pieceAdverse){
+		while (i + decalage < tab.length && piecePositionIJ == pieceAdverse) {
+			if (tab[i + decalage][j] == pieceAdverse){
 				nombrePieceEncadree ++;
 			}
-			piecePositionIJ = grid[i + decalage][j];
+			piecePositionIJ = tab[i + decalage][j];
 			decalage++;
 		}
-		System.out.println("2");
-
+		  System.out.println(" i : " + i + " j : " + j);
+		  System.out.println("pieceEncadreeBas : " + (piecePositionIJ == pieceJoueur));
 		return (nombrePieceEncadree != 0 && piecePositionIJ == pieceJoueur );
 	}
 	
@@ -303,19 +296,19 @@ class Othello {
 	 * @return true si au moins une piece adverse est encadree, false sinon
 	 * @author Antoine CLERO
 	 **/
-	boolean pieceEncadreeGauche(int i,int j){
+	boolean pieceEncadreeGauche(char[][] tab, int i,int j){
 		int decalage = 1;
 		int nombrePieceEncadree = 0;
 		char piecePositionIJ = pieceAdverse;
 		while (j - decalage > 0 && piecePositionIJ == pieceAdverse) {
-			if (grid[i][j - decalage] == pieceAdverse){
+			if (tab[i][j - decalage] == pieceAdverse){
 				nombrePieceEncadree ++;
 			}
-			piecePositionIJ = grid[i][j - decalage];
+			piecePositionIJ = tab[i][j - decalage];
 			decalage++;
 		}
-		System.out.println("3");
-
+		  System.out.println(" i : " + i + " j : " + j);
+		  System.out.println("pieceEncadreeGauche : " + (piecePositionIJ == pieceJoueur));
 		return (nombrePieceEncadree != 0 && piecePositionIJ == pieceJoueur );
 	}
 	
@@ -325,19 +318,19 @@ class Othello {
 	 * @return true si au moins une piece adverse est encadree, false sinon
 	 * @author Antoine CLERO
 	 **/
-	boolean pieceEncadreeHaut(int i,int j){
+	boolean pieceEncadreeHaut(char[][] tab, int i,int j){
 		int decalage = 1;
 		int nombrePieceEncadree = 0;
 		char piecePositionIJ = pieceAdverse;
 		while (i - decalage > 0 && piecePositionIJ == pieceAdverse) {
-			if (grid[i - decalage][j] == pieceAdverse){
+			if (tab[i - decalage][j] == pieceAdverse){
 				nombrePieceEncadree ++;
 			}
-			piecePositionIJ = grid[i - decalage][j];
+			piecePositionIJ = tab[i - decalage][j];
 			decalage++;
 		}
-		System.out.println("4");
-
+		  System.out.println(" i : " + i + " j : " + j);
+		  System.out.println("pieceEncadreeHaut : " + (piecePositionIJ == pieceJoueur) );
 		return (nombrePieceEncadree != 0 && piecePositionIJ == pieceJoueur );
 	}
 	
@@ -347,20 +340,21 @@ class Othello {
 	 * @return true si au moins une piece adverse est encadree, false sinon
 	 * @author Antoine CLERO
 	 **/
-	boolean pieceEncadreeDroiteBas(int i,int j){
+	boolean pieceEncadreeDroiteBas(char[][] tab, int i,int j){
 		int decalage = 1;
 		int nombrePieceEncadree = 0;
 		char piecePositionIJ = pieceAdverse;
-		while (j + decalage < grid.length && i + decalage < grid.length && piecePositionIJ == pieceAdverse) {
-			if (grid[i + decalage][j + decalage] == pieceAdverse){
+		while (j + decalage < tab.length && i + decalage < tab.length && piecePositionIJ == pieceAdverse) {
+			if (tab[i + decalage][j + decalage] == pieceAdverse){
 				nombrePieceEncadree ++;
 
 			}
-			piecePositionIJ = grid[i + decalage][j + decalage];
+			piecePositionIJ = tab[i + decalage][j + decalage];
 			decalage++;
 
 		}
-		System.out.println("5");
+		  System.out.println(" i : " + i + " j : " + j);
+		  System.out.println("pieceEncadreeDroiteBas : " + (piecePositionIJ == pieceJoueur));
 		return (nombrePieceEncadree != 0 && piecePositionIJ == pieceJoueur );
 	}
 	
@@ -371,19 +365,20 @@ class Othello {
 	 * @return true si au moins une piece adverse est encadree, false sinon
 	 * @author Antoine CLERO
 	 **/
-	boolean pieceEncadreeGaucheBas(int i,int j){
+	boolean pieceEncadreeGaucheBas(char[][] tab, int i,int j){
 		int decalage = 1;
 		int nombrePieceEncadree = 0;
 		char piecePositionIJ = pieceAdverse;
-		while (i + decalage < grid.length && j - decalage > 0 && piecePositionIJ == pieceAdverse) {
-			if (grid[i + decalage][j - decalage] == pieceAdverse){
+		while (i + decalage < tab.length && j - decalage > 0 && piecePositionIJ == pieceAdverse) {
+			if (tab[i + decalage][j - decalage] == pieceAdverse){
 				nombrePieceEncadree ++;
 			}
-			piecePositionIJ = grid[i + decalage][j - decalage];
+			piecePositionIJ = tab[i + decalage][j - decalage];
 			decalage++;
 
 		}
-		System.out.println("6");
+		  System.out.println(" i : " + i + " j : " + j);
+		  System.out.println("pieceEncadreeGaucheBas : " + (piecePositionIJ == pieceJoueur));
 		return (nombrePieceEncadree != 0 && piecePositionIJ == pieceJoueur );
 	}
 	
@@ -393,18 +388,19 @@ class Othello {
 	 * @return true si au moins une piece adverse est encadree, false sinon
 	 * @author Antoine CLERO
 	 **/
-	boolean pieceEncadreeGaucheHaut(int i,int j){
+	boolean pieceEncadreeGaucheHaut(char[][] tab, int i,int j){
 		int decalage = 1;
 		int nombrePieceEncadree = 0;
 		char piecePositionIJ = pieceAdverse;
-		while (i - decalage > 0 && j - decalage > 0 && piecePositionIJ == pieceAdverse) {
-			if (grid[i - decalage][j - decalage] == pieceAdverse){
+		while (i - decalage > 0 && j - decalage > 0 && (piecePositionIJ == pieceAdverse)) {
+			if (tab[i - decalage][j - decalage] == pieceAdverse){
 				nombrePieceEncadree ++;
 			}
-			piecePositionIJ = grid[i - decalage][j - decalage];
+			piecePositionIJ = tab[i - decalage][j - decalage];
 			decalage++;
 		}
-		System.out.println("7");
+		  System.out.println(" i : " + i + " j : " + j);
+		  System.out.println("pieceEncadreeGaucheHaut : " + (piecePositionIJ == pieceJoueur));
 		return (nombrePieceEncadree != 0 && piecePositionIJ == pieceJoueur );
 	}
 	
@@ -414,18 +410,19 @@ class Othello {
 	 * @return true si au moins une piece adverse est encadree, false sinon
 	 * @author Antoine CLERO
 	 **/
-	boolean pieceEncadreeDroiteHaut(int i,int j){
+	boolean pieceEncadreeDroiteHaut(char[][] tab, int i,int j){
 		int decalage = 1;
 		int nombrePieceEncadree = 0;
 		char piecePositionIJ = pieceAdverse;
-		while (i - decalage > 0 && j + decalage < grid.length && piecePositionIJ == pieceAdverse) {
-			if (grid[i - decalage][j + decalage] == pieceAdverse){
+		while (i - decalage > 0 && j + decalage < tab.length && piecePositionIJ == pieceAdverse) {
+			if (tab[i - decalage][j + decalage] == pieceAdverse){
 				nombrePieceEncadree ++;
 			}
-			piecePositionIJ = grid[i - decalage][j + decalage];
+			piecePositionIJ = tab[i - decalage][j + decalage];
 			decalage++;
 		}
-		System.out.println("8");
+		  System.out.println(" i : " + i + " j : " + j);
+		  System.out.println("pieceEncadreeDroiteHaut : " + (piecePositionIJ == pieceJoueur));
 		return (nombrePieceEncadree != 0 && piecePositionIJ == pieceJoueur );
 	}
 
@@ -443,7 +440,7 @@ class Othello {
 		do{
 			i = (int)(Math.random() * grid.length);
 			j = (int)(Math.random() * grid.length);
-		}while (grid[i][j] == '^');
+		}while (grid[i][j] != '^');
 		int[] coupAleatoire = new int[2];
 		coupAleatoire[0] = i;
 		coupAleatoire[1] = j;
@@ -468,26 +465,42 @@ class Othello {
 				}
 			} 
 		}
-		
+		char[][] tabCopie = copieTableau();
 		///Creation des listes qui compte le nombre de points rapporte (pointsRapportes) avec le placement de la piece a certaine coordonnee (coupsAutorise)
 		///En lisant le tableau de droite a gauche et de heut en bas, l'indice 0 correspond au premier coup autorise, l'indice 1 au deuxieme coup autorise, etc
 		int[][] coupsAutorise = new int[nombreCoupsAutorises][2];
+
 		int[] pointsRapportes = new int[nombreCoupsAutorises];
 
 		//calcul du nombre de points rapporte par chaque placement possibles
 		int i = 0;
-		for (int j = 0; i < grid.length; i++){
-			for (int k = 0; k < grid.length; j++){
+		  ///System.out.println("taille : " + grid.length);
+		for (int j = 0; j < grid.length; j++){
+			for (int k = 0; k < grid.length; k++){
+				  ///System.out.println(" j : " + j +"  k : "+k);
+				  
 				if (grid[j][k] == '^'){
-					char[][] tabCopie = copieTableau(); //copie les tableau tab
+					
+					tabCopie = copieTableau(); //copie le tableau grid
+					  ///System.out.print("nouveau tableau");
+					  ///displayTabTestUnitaire(tabCopie);
+
 					coupsAutorise[i][0] = j; //Enregistrement des indice correspondant au coup i
 					coupsAutorise[i][1] = k;
 					pointsRapportes[i] = placeEtRetournePiece(tabCopie,coupsAutorise[i]); //retournePiece renvoie le nombre de pieces retournees au coup i
+					  ///displayTabTestUnitaire(tabCopie);
+					  ///displayTabTest(coupsAutorise);
+					  ///displayTab(pointsRapportes);
 					
+
 					i++;
 				}
 			}
 		}
+		///displayTab(coupReflechi);
+		  System.out.println( "nouveau tableau" );
+		  displayTabTestUnitaire(grid);
+		  System.out.println(grid == tabCopie );
 		return coupsAutorise[indicePlusGrand(pointsRapportes)]; //Renvoie le couple de coordonnees (j,k) 
 
 	}
@@ -550,40 +563,39 @@ class Othello {
 	 * @return pieceJoueur, pieceAdverse
 	 * @author Antoine CLERO
 	 */
-	int placeEtRetournePiece(char[][] grid, int[] coordonnees){
+	int placeEtRetournePiece(char[][] tab, int[] coordonnees){
 		int NombreDePointGagne = 0;
-		displayTabTestUnitaire(grid);
 
 		//Placement de la piece 
 		int i = coordonnees[0];
 		int j = coordonnees[1];
-		grid[i][j] = pieceJoueur;
+		tab[i][j] = pieceJoueur;
 		NombreDePointGagne++;
 		
 		//Retournemement des pieces dans toute les directions
-		if (pieceEncadreeDroite(i, j)){
-			NombreDePointGagne += retournementDroite(i, j);
+		if (pieceEncadreeDroite(tab, i, j)){
+			NombreDePointGagne += retournementDroite(tab, i, j);
 		}
-		if (pieceEncadreeBas(i, j)){
-			NombreDePointGagne += retournementBas(i, j);
+		if (pieceEncadreeBas(tab, i, j)){
+			NombreDePointGagne += retournementBas(tab, i, j);
 		}
-		if (pieceEncadreeGauche(i, j)){
-			NombreDePointGagne += retournementGauche(i, j);
+		if (pieceEncadreeGauche(tab, i, j)){
+			NombreDePointGagne += retournementGauche(tab, i, j);
 		}
-		if (pieceEncadreeHaut(i, j)){
-			NombreDePointGagne += retournementHaut(i, j);
+		if (pieceEncadreeHaut(tab, i, j)){
+			NombreDePointGagne += retournementHaut(tab, i, j);
 		}
-		if (pieceEncadreeDroiteBas(i, j)){
-			NombreDePointGagne += retournementDroiteBas(i, j);
+		if (pieceEncadreeDroiteBas(tab, i, j)){
+			NombreDePointGagne += retournementDroiteBas(tab, i, j);
 		}
-		if (pieceEncadreeGaucheBas(i, j)){
-			NombreDePointGagne += retournementGaucheBas(i, j);
+		if (pieceEncadreeGaucheBas(tab, i, j)){
+			NombreDePointGagne += retournementGaucheBas(tab, i, j);
 		}
-		if (pieceEncadreeGaucheHaut(i, j)){
-			NombreDePointGagne += retournementGaucheHaut(i, j);
+		if (pieceEncadreeGaucheHaut(tab, i, j)){
+			NombreDePointGagne += retournementGaucheHaut(tab, i, j);
 		}
-		if (pieceEncadreeDroiteHaut(i, j)){
-			NombreDePointGagne += retournementDroiteHaut(i, j);
+		if (pieceEncadreeDroiteHaut(tab, i, j)){
+			NombreDePointGagne += retournementDroiteHaut(tab, i, j);
 		}
 		return NombreDePointGagne;
 	}
@@ -599,12 +611,12 @@ class Othello {
 	 * @return nombrePieceEncadree : Le nombre de pions retournes
 	 * @author Antoine CLERO
 	 **/
-	int retournementDroite(int i,int j){
+	int retournementDroite(char[][] tab, int i,int j){
 		
 		int decalage = 1;
 		int nombrePieceEncadree = 0;
-		while (grid[i][j + decalage] == pieceAdverse) {
-			grid[i][j + decalage] = pieceJoueur;
+		while (tab[i][j + decalage] == pieceAdverse) {
+			tab[i][j + decalage] = pieceJoueur;
 			decalage++;
 			nombrePieceEncadree ++;
 		}
@@ -619,12 +631,12 @@ class Othello {
 	 * @return nombrePieceEncadree : Le nombre de pions retournes
 	 * @author Antoine CLERO
 	 **/
-	int retournementBas(int i,int j){
+	int retournementBas(char[][] tab, int i,int j){
 		
 		int decalage = 1;
 		int nombrePieceEncadree = 0;
-		while (grid[i + decalage][j] == pieceAdverse) {
-			grid[i + decalage][j] = pieceJoueur;
+		while (tab[i + decalage][j] == pieceAdverse) {
+			tab[i + decalage][j] = pieceJoueur;
 			decalage++;
 			nombrePieceEncadree ++;
 		}
@@ -639,12 +651,12 @@ class Othello {
 	 * @return nombrePieceEncadree : Le nombre de pions retournes
 	 * @author Antoine CLERO
 	 **/
-	int retournementGauche(int i,int j){
+	int retournementGauche(char[][] tab, int i,int j){
 	
 		int decalage = 1;
 		int nombrePieceEncadree = 0;
-		while (grid[i][j - decalage] == pieceAdverse) {
-			grid[i][j - decalage] = pieceJoueur;
+		while (tab[i][j - decalage] == pieceAdverse) {
+			tab[i][j - decalage] = pieceJoueur;
 			decalage++;
 			nombrePieceEncadree ++;
 		}
@@ -659,12 +671,12 @@ class Othello {
 	 * @return nombrePieceEncadree : Le nombre de pions retournes
 	 * @author Antoine CLERO
 	 **/
-	int retournementHaut(int i,int j){
+	int retournementHaut(char[][] tab, int i,int j){
 
 		int decalage = 1;
 		int nombrePieceEncadree = 0;
-		while (grid[i - decalage][j] == pieceAdverse) {
-			grid[i - decalage][j] = pieceJoueur;
+		while (tab[i - decalage][j] == pieceAdverse) {
+			tab[i - decalage][j] = pieceJoueur;
 			decalage++;
 			nombrePieceEncadree ++;
 		}
@@ -679,12 +691,12 @@ class Othello {
 	 * @return nombrePieceEncadree : Le nombre de pions retournes
 	 * @author Antoine CLERO
 	 **/
-	int retournementDroiteBas(int i,int j){
+	int retournementDroiteBas(char[][] tab, int i,int j){
 		
 		int decalage = 1;
 		int nombrePieceEncadree = 0;
-		while (grid[i + decalage][j + decalage] == pieceAdverse) {
-			grid[i + decalage][j+ decalage] = pieceJoueur;
+		while (tab[i + decalage][j + decalage] == pieceAdverse) {
+			tab[i + decalage][j+ decalage] = pieceJoueur;
 			decalage++;
 			nombrePieceEncadree ++;
 		}
@@ -699,12 +711,12 @@ class Othello {
 	 * @return nombrePieceEncadree : Le nombre de pions retournes
 	 * @author Antoine CLERO
 	 **/
-	int retournementGaucheBas(int i,int j){
+	int retournementGaucheBas(char[][] tab, int i,int j){
 
 		int decalage = 1;
 		int nombrePieceEncadree = 0;
-		while (grid[i + decalage][j - decalage] == pieceAdverse) {
-			grid[i + decalage][j - decalage] = pieceJoueur;
+		while (tab[i + decalage][j - decalage] == pieceAdverse) {
+			tab[i + decalage][j - decalage] = pieceJoueur;
 			decalage++;
 			nombrePieceEncadree ++;
 		}
@@ -719,12 +731,12 @@ class Othello {
 	 * @return nombrePieceEncadree : Le nombre de pions retournes
 	 * @author Antoine CLERO
 	 **/
-	int retournementGaucheHaut(int i,int j){
+	int retournementGaucheHaut(char[][] tab, int i,int j){
 
 		int decalage = 1;
 		int nombrePieceEncadree = 0;
-		while (grid[i - decalage][j - decalage] == pieceAdverse) {
-			grid[i - decalage][j - decalage] = pieceJoueur;
+		while (tab[i - decalage][j - decalage] == pieceAdverse) {
+			tab[i - decalage][j - decalage] = pieceJoueur;
 			decalage++;
 			nombrePieceEncadree ++;
 		}
@@ -739,12 +751,12 @@ class Othello {
 	 * @return nombrePieceEncadree : Le nombre de pions retournes
 	 * @author Antoine CLERO
 	 **/
-	int retournementDroiteHaut(int i,int j){
+	int retournementDroiteHaut(char[][] tab, int i,int j){
 	
 		int decalage = 1;
 		int nombrePieceEncadree = 0;
-		while (grid[i - decalage][j + decalage] == pieceAdverse) {
-			grid[i - decalage][j + decalage] = pieceJoueur;
+		while (tab[i - decalage][j + decalage] == pieceAdverse) {
+			tab[i - decalage][j + decalage] = pieceJoueur;
 			decalage++;
 			nombrePieceEncadree ++;
 		}
@@ -917,8 +929,8 @@ class Othello {
 		boolean end = true;
 		for (int d = 0; d < 2; d++){
 			boolean[][] allowedCoup = authorizedLocation();
-			for(int i = 0; i < allowedCoup.length; i++){
-				for(int j = 0; j < allowedCoup[i].length; j++){
+			for(int i = 0; i < allowedCoup.length && end; i++){
+				for(int j = 0; j < allowedCoup[i].length && end; j++){
 					if (allowedCoup[i][j] == true) {
 						end = false;
 					}
@@ -930,6 +942,21 @@ class Othello {
 		return end;
 	}
 	
+	boolean peutJouer(){
+		boolean resultat = false;
+		int i = 0;
+		while (!resultat && i < grid.length){
+			int j = 0;
+			while (!resultat && j < grid.length){
+				if (grid[i][j] == '^'){
+					resultat = true;
+				}
+				j++;
+			}
+			i++;
+		}
+		return resultat;
+	}
 	void displayTab(int[] t){
         int i = 0;
         System.out.print("{");
@@ -944,4 +971,30 @@ class Othello {
             System.out.println("}");
         }
     }
+    
+    
+    
+    
+    
+    void displayTabTest (int[][] tab){
+		// System.out.print("\033c"); //Vide la console
+		System.out.print("   ");
+		for(int k = 97; k < tab.length + 96; k++){  //Affiche les lettres indiquant les colonnes 
+			System.out.print((char)k + " ");        //transformation des chiffre en lettre (autorisee par Mme Naert)
+		}
+		System.out.println((char)(tab.length + 96));
+		
+		for(int i = 0; i < tab.length; i++){
+			if (i < 9){
+				System.out.print(" " + (i + 1) + " "); //Affiche les nombres indiquant les lignes
+			}else{
+				System.out.print((i + 1)+ " ");
+			}
+			for (int j = 0; j < tab[i].length-1; j++){
+				System.out.print (tab[i][j]);       //Affichage du plateau
+				System.out.print('|');
+			}
+			System.out.println(tab[i][tab[i].length-1]);
+		}
+	}
 }
