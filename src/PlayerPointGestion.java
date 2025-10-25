@@ -245,7 +245,7 @@ public class PlayerPointGestion {
 	/**Affiche correctement le tableau
 	 * @param tab : le tableau a remplir
 	 **/
-	void displayTab3d (char[][] tab){
+	void displayTabTestUnitaire (char[][] tab){
 		// System.out.print("\033c"); //Vide la console
 		System.out.print("   ");
 		for(int k = 97; k < tab.length + 96; k++){  //Affiche les lettres indiquant les colonnes 
