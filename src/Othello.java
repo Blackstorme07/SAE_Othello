@@ -85,16 +85,16 @@ class Othello {
 		grid[grid.length/2][(grid.length/2)-1] = 'o';
 	}
 	
-	/** Initialise le menu du jeu avec choix taille grille / solo / duo / qui commence
-	 * a executer apres le test unitaire
-	 * @return : tableau contenant la configuraton du jeu
+	/**
+	 * Vide la console et affiche le logo du jeu avec des caracteres
 	 * @author S. GIRARDEAU
 	 */
-	int[] initGameMenu(){
-		int lengthGrid, gameMode;
-		int StartPlayer = 0; // le joueur ne commence pas par defaut
-		int difficulty = 0;
-		char PlayerChoice = 'O';
+	void showOthello(){
+		
+		//Vide la console (ou fait comme si elle se vidais pour ne pas afficher le plateau du joueur precedent)
+		for (int i = 0; i < 25;i++){
+			System.out.println("\n");
+		}
 		
 		System.out.println("""
 						Welcome to
@@ -110,10 +110,27 @@ class Othello {
 																			
 			----------------------------------------------------------------
 			""");
+			
+
+		System.out.println("\n");
+	}
+	
+	/** Initialise le menu du jeu avec choix taille grille / solo / duo / qui commence
+	 * a executer apres le test unitaire
+	 * @return : tableau contenant la configuraton du jeu
+	 * @author S. GIRARDEAU
+	 */
+	int[] initGameMenu(){
+		int lengthGrid, gameMode;
+		int StartPlayer = 0; // le joueur ne commence pas par defaut
+		int difficulty = 0;
+		char PlayerChoice = 'O';
+		
+		showOthello();
 		
 		do {
 			lengthGrid = SimpleInput.getInt("Saisir la taille du plateau (entre 4 a 16) : ");
-		} while (lengthGrid < 4 || lengthGrid > 16); // on demande tant que lengthGrid n'est pas entre 4 et 16
+		} while (lengthGrid < 4 || lengthGrid > 16 || (lengthGrid % 2) != 0); // on demande tant que lengthGrid n'est pas entre 4 et 16
 		
 		do {
 			gameMode = SimpleInput.getInt("Saisir mode de jeu : (1:Solo / 2:Duo) : ");
@@ -146,6 +163,7 @@ class Othello {
 		String request;
 		int i = -150;
 		int j = -150;
+		
 		do {
 			request = SimpleInput.getString("Entrez les coordonnees sous la forme (chiffrelettre) (ex: 1a) : ");
 			if (request.length() == 2) {
@@ -168,10 +186,9 @@ class Othello {
 	 **/
 	void showGrid (){
 
-		//Vide la console (ou fait comme si elle se vidais pour ne pas afficher le plateau du joueur precedent)
-		for (int i = 0; i < 25;i++){
-			System.out.println("\n");
-		}
+
+		
+		showOthello();
 		
 		System.out.println("Au tour des " + pieceJoueur);
 		
