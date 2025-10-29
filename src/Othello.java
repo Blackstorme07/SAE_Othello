@@ -270,19 +270,23 @@ class Othello {
 	 * @author Antoine CLERO
 	 **/
 	boolean pieceEncadreeDroite(char[][] tab, int i,int j){
-		int decalage = 1;
-		int nombrePieceEncadree = 0;
-		char piecePositionIJ = pieceAdverse;
-		while (j + decalage < tab.length && piecePositionIJ == pieceAdverse) {
-			if (tab[i][j + decalage] == pieceAdverse){
-				nombrePieceEncadree ++;
+		boolean encadre = false;
+		
+		//on verifie si la piece a droite est bien une piece adverse
+		if (j + 1 < tab.length && tab[i][j + 1] == pieceAdverse){
+			
+			//on decale jusqu'a ce que la piece suivante ne soit plus une piece adverse
+			int decalage = 2;
+			while (j + decalage < tab.length && tab[i][j + decalage] == pieceAdverse){
+				decalage++;
 			}
-			piecePositionIJ = tab[i][j + decalage];
-			decalage++;
+			
+			//on verifie si la derniere piece est bien la notre
+			if (j + decalage < tab.length && tab[i][j + decalage] == pieceJoueur){
+				encadre = true;
+			}
 		}
-		  System.out.println(" i : " + i + " j : " + j);
-		  System.out.println("pieceEncadreeDroite : " + (piecePositionIJ == pieceJoueur));
-		return (nombrePieceEncadree != 0 && piecePositionIJ == pieceJoueur );
+		return encadre;
 	}
 	
 	/**
@@ -292,19 +296,23 @@ class Othello {
 	 * @author Antoine CLERO
 	 **/
 	boolean pieceEncadreeBas(char[][] tab, int i,int j){
-		int decalage = 1;
-		int nombrePieceEncadree = 0;
-		char piecePositionIJ = pieceAdverse;
-		while (i + decalage < tab.length && piecePositionIJ == pieceAdverse) {
-			if (tab[i + decalage][j] == pieceAdverse){
-				nombrePieceEncadree ++;
+		boolean encadre = false;
+		
+		//on verifie si la piece en bas est bien une piece adverse
+		if (i + 1 < tab.length && tab[i + 1][j] == pieceAdverse){
+			
+			//on decale jusqu'a ce que la piece suivante ne soit plus une piece adverse
+			int decalage = 2;
+			while (i + decalage < tab.length && tab[i + decalage][j] == pieceAdverse){
+				decalage++;
 			}
-			piecePositionIJ = tab[i + decalage][j];
-			decalage++;
+			
+			//on verifie si la derniere piece est bien la notre
+			if (i + decalage < tab.length && tab[i + decalage][j] == pieceJoueur){
+				encadre = true;
+			}
 		}
-		  System.out.println(" i : " + i + " j : " + j);
-		  System.out.println("pieceEncadreeBas : " + (piecePositionIJ == pieceJoueur));
-		return (nombrePieceEncadree != 0 && piecePositionIJ == pieceJoueur );
+		return encadre;
 	}
 	
 	/**
@@ -314,21 +322,25 @@ class Othello {
 	 * @author Antoine CLERO
 	 **/
 	boolean pieceEncadreeGauche(char[][] tab, int i,int j){
-		int decalage = 1;
-		int nombrePieceEncadree = 0;
-		char piecePositionIJ = pieceAdverse;
-		while (j - decalage > 0 && piecePositionIJ == pieceAdverse) {
-			if (tab[i][j - decalage] == pieceAdverse){
-				nombrePieceEncadree ++;
+		boolean encadre = false;
+		
+		//on verifie si la piece a gauche est bien une piece adverse
+		if (j - 1 > 0 && tab[i][j - 1] == pieceAdverse){
+			
+			//on decale jusqu'a ce que la piece suivante ne soit plus une piece adverse
+			int decalage = 2;
+			while (j - decalage > 0 && tab[i][j - decalage] == pieceAdverse){
+				decalage++;
 			}
-			piecePositionIJ = tab[i][j - decalage];
-			decalage++;
+			
+			//on verifie si la derniere piece est bien la notre
+			if (j - decalage > 0 && tab[i][j - decalage] == pieceJoueur){
+				encadre = true;
+			}
 		}
-		  System.out.println(" i : " + i + " j : " + j);
-		  System.out.println("pieceEncadreeGauche : " + (piecePositionIJ == pieceJoueur));
-		return (nombrePieceEncadree != 0 && piecePositionIJ == pieceJoueur );
+		return encadre;
+		
 	}
-	
 	/**
 	 * Verifie si il y a un pion adverse d'encadre par le placement d'un pion sur la case selectionnee (sur le dessus de la case)
 	 * @param i, j : coordonnees de la case verifiee
@@ -336,19 +348,23 @@ class Othello {
 	 * @author Antoine CLERO
 	 **/
 	boolean pieceEncadreeHaut(char[][] tab, int i,int j){
-		int decalage = 1;
-		int nombrePieceEncadree = 0;
-		char piecePositionIJ = pieceAdverse;
-		while (i - decalage > 0 && piecePositionIJ == pieceAdverse) {
-			if (tab[i - decalage][j] == pieceAdverse){
-				nombrePieceEncadree ++;
+		boolean encadre = false;
+		
+		//on verifie si la piece en haut est bien une piece adverse
+		if (i - 1 > 0 && tab[i - 1][j] == pieceAdverse){
+			
+			//on decale jusqu'a ce que la piece suivante ne soit plus une piece adverse
+			int decalage = 2;
+			while (i - decalage > 0 && tab[i - decalage][j] == pieceAdverse){
+				decalage++;
 			}
-			piecePositionIJ = tab[i - decalage][j];
-			decalage++;
+			
+			//on verifie si la derniere piece est bien la notre
+			if (i - decalage > 0 && tab[i - decalage][j] == pieceJoueur){
+				encadre = true;
+			}
 		}
-		  System.out.println(" i : " + i + " j : " + j);
-		  System.out.println("pieceEncadreeHaut : " + (piecePositionIJ == pieceJoueur) );
-		return (nombrePieceEncadree != 0 && piecePositionIJ == pieceJoueur );
+		return encadre;
 	}
 	
 	/**
@@ -358,45 +374,49 @@ class Othello {
 	 * @author Antoine CLERO
 	 **/
 	boolean pieceEncadreeDroiteBas(char[][] tab, int i,int j){
-		int decalage = 1;
-		int nombrePieceEncadree = 0;
-		char piecePositionIJ = pieceAdverse;
-		while (j + decalage < tab.length && i + decalage < tab.length && piecePositionIJ == pieceAdverse) {
-			if (tab[i + decalage][j + decalage] == pieceAdverse){
-				nombrePieceEncadree ++;
-
+		boolean encadre = false;
+		
+		//on verifie si la piece en bas a droite est bien une piece adverse
+		if (j + 1 < tab.length && i + 1 < tab.length && tab[i + 1][j + 1] == pieceAdverse){
+			
+			//on decale jusqu'a ce que la piece suivante ne soit plus une piece adverse
+			int decalage = 2;
+			while (j + decalage < tab.length && i + decalage < tab.length && tab[i + decalage][j + decalage] == pieceAdverse){
+				decalage++;
 			}
-			piecePositionIJ = tab[i + decalage][j + decalage];
-			decalage++;
-
+			
+			//on verifie si la derniere piece est bien la notre
+			if (j + decalage < tab.length && i + decalage < tab.length && tab[i + decalage][j + decalage] == pieceJoueur){
+				encadre = true;
+			}
 		}
-		  System.out.println(" i : " + i + " j : " + j);
-		  System.out.println("pieceEncadreeDroiteBas : " + (piecePositionIJ == pieceJoueur));
-		return (nombrePieceEncadree != 0 && piecePositionIJ == pieceJoueur );
+		return encadre;
 	}
 	
 	/**
 	 * Verifie si il y a un pion adverse d'encadre par le placement d'un pion sur la case selectionnee (sur la diagonale gauche-bas de la case)
 	 * @param i, j : coordonnees de la case verifiee
-
 	 * @return true si au moins une piece adverse est encadree, false sinon
 	 * @author Antoine CLERO
 	 **/
 	boolean pieceEncadreeGaucheBas(char[][] tab, int i,int j){
-		int decalage = 1;
-		int nombrePieceEncadree = 0;
-		char piecePositionIJ = pieceAdverse;
-		while (i + decalage < tab.length && j - decalage > 0 && piecePositionIJ == pieceAdverse) {
-			if (tab[i + decalage][j - decalage] == pieceAdverse){
-				nombrePieceEncadree ++;
+		boolean encadre = false;
+		
+		//on verifie si la piece en bas a gauche est bien une piece adverse
+		if (j - 1 > 0 && i + 1 < tab.length && tab[i + 1][j - 1] == pieceAdverse){
+			
+			//on decale jusqu'a ce que la piece suivante ne soit plus une piece adverse
+			int decalage = 2;
+			while (j - decalage > 0 && i + decalage < tab.length && tab[i + decalage][j - decalage] == pieceAdverse){
+				decalage++;
 			}
-			piecePositionIJ = tab[i + decalage][j - decalage];
-			decalage++;
-
+			
+			//on verifie si la derniere piece est bien la notre
+			if (j - decalage > 0 && i + decalage < tab.length && tab[i + decalage][j - decalage] == pieceJoueur){
+				encadre = true;
+			}
 		}
-		  System.out.println(" i : " + i + " j : " + j);
-		  System.out.println("pieceEncadreeGaucheBas : " + (piecePositionIJ == pieceJoueur));
-		return (nombrePieceEncadree != 0 && piecePositionIJ == pieceJoueur );
+		return encadre;
 	}
 	
 	/**
@@ -406,19 +426,23 @@ class Othello {
 	 * @author Antoine CLERO
 	 **/
 	boolean pieceEncadreeGaucheHaut(char[][] tab, int i,int j){
-		int decalage = 1;
-		int nombrePieceEncadree = 0;
-		char piecePositionIJ = pieceAdverse;
-		while (i - decalage > 0 && j - decalage > 0 && (piecePositionIJ == pieceAdverse)) {
-			if (tab[i - decalage][j - decalage] == pieceAdverse){
-				nombrePieceEncadree ++;
+		boolean encadre = false;
+		
+		//on verifie si la piece en haut a gauche est bien une piece adverse
+		if (j - 1 > 0 && i - 1 > 0 && tab[i - 1][j - 1] == pieceAdverse){
+			
+			//on decale jusqu'a ce que la piece suivante ne soit plus une piece adverse
+			int decalage = 2;
+			while (j - decalage > 0 && i - decalage > 0 && tab[i - decalage][j - decalage] == pieceAdverse){
+				decalage++;
 			}
-			piecePositionIJ = tab[i - decalage][j - decalage];
-			decalage++;
+			
+			//on verifie si la derniere piece est bien la notre
+			if (j - decalage > 0 && i - decalage > 0 && tab[i - decalage][j - decalage] ==  pieceJoueur){
+				encadre = true;
+			}
 		}
-		  System.out.println(" i : " + i + " j : " + j);
-		  System.out.println("pieceEncadreeGaucheHaut : " + (piecePositionIJ == pieceJoueur));
-		return (nombrePieceEncadree != 0 && piecePositionIJ == pieceJoueur );
+		return encadre;
 	}
 	
 	/**
@@ -428,19 +452,23 @@ class Othello {
 	 * @author Antoine CLERO
 	 **/
 	boolean pieceEncadreeDroiteHaut(char[][] tab, int i,int j){
-		int decalage = 1;
-		int nombrePieceEncadree = 0;
-		char piecePositionIJ = pieceAdverse;
-		while (i - decalage > 0 && j + decalage < tab.length && piecePositionIJ == pieceAdverse) {
-			if (tab[i - decalage][j + decalage] == pieceAdverse){
-				nombrePieceEncadree ++;
+		boolean encadre = false;
+		
+		//on verifie si la piece en haut a droite est bien une piece adverse
+		if (j + 1 < tab.length && i - 1 > 0 && tab[i - 1][j + 1] == pieceAdverse){
+			
+			//on decale jusqu'a ce que la piece suivante ne soit plus une piece adverse
+			int decalage = 2;
+			while (j + decalage < tab.length && i - decalage > 0 && tab[i - decalage][j + decalage] == pieceAdverse){
+				decalage++;
 			}
-			piecePositionIJ = tab[i - decalage][j + decalage];
-			decalage++;
+			
+			//on verifie si la derniere piece est bien la notre
+			if (j + decalage < tab.length && i - decalage > 0 && tab[i - decalage][j + decalage] == pieceJoueur){
+				encadre = true;
+			}
 		}
-		  System.out.println(" i : " + i + " j : " + j);
-		  System.out.println("pieceEncadreeDroiteHaut : " + (piecePositionIJ == pieceJoueur));
-		return (nombrePieceEncadree != 0 && piecePositionIJ == pieceJoueur );
+		return encadre;
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
