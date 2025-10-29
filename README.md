@@ -26,6 +26,7 @@ Le caractère '^' indique les coordonnées où le joueur en cours peut placer un
 
 ```bash
 git clone https://github.com/Blackstorme07/SAE_Othello
+cd SAE_Othello
 javac -cp ./class -d ./class ./src/*.java
 java -cp ./class Start Othello
 ```
