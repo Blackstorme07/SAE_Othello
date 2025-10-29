@@ -943,7 +943,7 @@ class Othello {
 		
 		boolean[][] allowedCoup = authorizedLocation();
 		
-		for (int i = 0; i < allowedCoup.length; i++) { // allowedCoup est a remplacer par authorizedLocation
+		for (int i = 0; i < allowedCoup.length; i++) {
 			for (int j = 0; j < allowedCoup[i].length; j++) {
 				if (allowedCoup[i][j]) {
 					grid[i][j] = '^';
@@ -1022,7 +1022,6 @@ class Othello {
     
     
     void displayTabTest (int[][] tab){
-		// System.out.print("\033c"); //Vide la console
 		System.out.print("   ");
 		for(int k = 97; k < tab.length + 96; k++){  //Affiche les lettres indiquant les colonnes 
 			System.out.print((char)k + " ");        //transformation des chiffre en lettre (autorisee par Mme Naert)
