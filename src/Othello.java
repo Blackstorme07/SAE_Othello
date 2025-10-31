@@ -325,16 +325,16 @@ class Othello {
 		boolean encadre = false;
 		
 		//on verifie si la piece a gauche est bien une piece adverse
-		if (j - 1 > 0 && tab[i][j - 1] == pieceAdverse){
+		if (j - 1 >= 0 && tab[i][j - 1] == pieceAdverse){
 			
 			//on decale jusqu'a ce que la piece suivante ne soit plus une piece adverse
 			int decalage = 2;
-			while (j - decalage > 0 && tab[i][j - decalage] == pieceAdverse){
+			while (j - decalage >= 0 && tab[i][j - decalage] == pieceAdverse){
 				decalage++;
 			}
 			
 			//on verifie si la derniere piece est bien la notre
-			if (j - decalage > 0 && tab[i][j - decalage] == pieceJoueur){
+			if (j - decalage >= 0 && tab[i][j - decalage] == pieceJoueur){
 				encadre = true;
 			}
 		}
@@ -351,16 +351,16 @@ class Othello {
 		boolean encadre = false;
 		
 		//on verifie si la piece en haut est bien une piece adverse
-		if (i - 1 > 0 && tab[i - 1][j] == pieceAdverse){
+		if (i - 1 >= 0 && tab[i - 1][j] == pieceAdverse){
 			
 			//on decale jusqu'a ce que la piece suivante ne soit plus une piece adverse
 			int decalage = 2;
-			while (i - decalage > 0 && tab[i - decalage][j] == pieceAdverse){
+			while (i - decalage >= 0 && tab[i - decalage][j] == pieceAdverse){
 				decalage++;
 			}
 			
 			//on verifie si la derniere piece est bien la notre
-			if (i - decalage > 0 && tab[i - decalage][j] == pieceJoueur){
+			if (i - decalage >= 0 && tab[i - decalage][j] == pieceJoueur){
 				encadre = true;
 			}
 		}
@@ -403,16 +403,16 @@ class Othello {
 		boolean encadre = false;
 		
 		//on verifie si la piece en bas a gauche est bien une piece adverse
-		if (j - 1 > 0 && i + 1 < tab.length && tab[i + 1][j - 1] == pieceAdverse){
+		if (j - 1 >= 0 && i + 1 < tab.length && tab[i + 1][j - 1] == pieceAdverse){
 			
 			//on decale jusqu'a ce que la piece suivante ne soit plus une piece adverse
 			int decalage = 2;
-			while (j - decalage > 0 && i + decalage < tab.length && tab[i + decalage][j - decalage] == pieceAdverse){
+			while (j - decalage >= 0 && i + decalage < tab.length && tab[i + decalage][j - decalage] == pieceAdverse){
 				decalage++;
 			}
 			
 			//on verifie si la derniere piece est bien la notre
-			if (j - decalage > 0 && i + decalage < tab.length && tab[i + decalage][j - decalage] == pieceJoueur){
+			if (j - decalage >= 0 && i + decalage < tab.length && tab[i + decalage][j - decalage] == pieceJoueur){
 				encadre = true;
 			}
 		}
@@ -429,16 +429,16 @@ class Othello {
 		boolean encadre = false;
 		
 		//on verifie si la piece en haut a gauche est bien une piece adverse
-		if (j - 1 > 0 && i - 1 > 0 && tab[i - 1][j - 1] == pieceAdverse){
+		if (j - 1 >= 0 && i - 1 >= 0 && tab[i - 1][j - 1] == pieceAdverse){
 			
 			//on decale jusqu'a ce que la piece suivante ne soit plus une piece adverse
 			int decalage = 2;
-			while (j - decalage > 0 && i - decalage > 0 && tab[i - decalage][j - decalage] == pieceAdverse){
+			while (j - decalage >= 0 && i - decalage >= 0 && tab[i - decalage][j - decalage] == pieceAdverse){
 				decalage++;
 			}
 			
 			//on verifie si la derniere piece est bien la notre
-			if (j - decalage > 0 && i - decalage > 0 && tab[i - decalage][j - decalage] ==  pieceJoueur){
+			if (j - decalage >= 0 && i - decalage >= 0 && tab[i - decalage][j - decalage] ==  pieceJoueur){
 				encadre = true;
 			}
 		}
@@ -455,16 +455,16 @@ class Othello {
 		boolean encadre = false;
 		
 		//on verifie si la piece en haut a droite est bien une piece adverse
-		if (j + 1 < tab.length && i - 1 > 0 && tab[i - 1][j + 1] == pieceAdverse){
+		if (j + 1 < tab.length && i - 1 >= 0 && tab[i - 1][j + 1] == pieceAdverse){
 			
 			//on decale jusqu'a ce que la piece suivante ne soit plus une piece adverse
 			int decalage = 2;
-			while (j + decalage < tab.length && i - decalage > 0 && tab[i - decalage][j + decalage] == pieceAdverse){
+			while (j + decalage < tab.length && i - decalage >= 0 && tab[i - decalage][j + decalage] == pieceAdverse){
 				decalage++;
 			}
 			
 			//on verifie si la derniere piece est bien la notre
-			if (j + decalage < tab.length && i - decalage > 0 && tab[i - decalage][j + decalage] == pieceJoueur){
+			if (j + decalage < tab.length && i - decalage >= 0 && tab[i - decalage][j + decalage] == pieceJoueur){
 				encadre = true;
 			}
 		}
@@ -986,7 +986,11 @@ class Othello {
 		}
 		return end;
 	}
-	
+	/**
+	 * Verifie si le joueur actuel peut jouer ou non
+	 * @return resultat : true si le joueur peut jouerv/ false sinon
+	 * @author Antoine CLERO
+	 */ 
 	boolean peutJouer(){
 		boolean resultat = false;
 		int i = 0;
@@ -1002,6 +1006,7 @@ class Othello {
 		}
 		return resultat;
 	}
+	
 	void displayTab(int[] t){
         int i = 0;
         System.out.print("{");
