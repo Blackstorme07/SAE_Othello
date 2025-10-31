@@ -1,8 +1,6 @@
 class Othello {
-	
-	char currentPlayer = 'o'; // le joueur avec les pions 'x' commence
-	
-	char[][] grid; // penser a initialiser dans le principal
+		
+	char[][] grid; // Initialisation de la grille
 	
 	char pieceJoueur = 'o';
 	char pieceAdverse = 'x';
@@ -14,15 +12,16 @@ class Othello {
 		System.out.println("----------------- Tests Unitaires -----------------");
 		testPointsCalculation();
 		SimpleInput.getString("entrer une chaine de caractere pour commencer a jouer : ");
-		int[] config = initGameMenu();
+		int[] config = initGameMenu(); // Configuration du jeu
 		grid = new char[config[0]][config[0]];
-		remplirTableau();
+		remplirTableau(); // place les quatres premieres pieces
 		int gameMode = config[1];  // 1 solo 2 duo
 		int botCommence = config[2];  //0 bot commence
-		int difficulteeBot = config[3];
+		int difficulteeBot = config[3]; // 1 facile (coup aleatoire) 2 difficile (coup reflechit)
 		int[] coup;
 		while (!finJeu()){ 
-			addHat();
+			
+			addHat(); // Ajout des char '^' (endroits ou le joueur peut jouer)
 
 			showGrid();
 			if (gameMode == 1 && nombreDeTour % 2 == botCommence){
@@ -91,7 +90,7 @@ class Othello {
 	 */
 	void showOthello(){
 		
-		//Vide la console (ou fait comme si elle se vidais pour ne pas afficher le plateau du joueur precedent)
+		//Vide la console
 		for (int i = 0; i < 25;i++){
 			System.out.println("\n");
 		}
@@ -115,7 +114,8 @@ class Othello {
 		System.out.println("\n");
 	}
 	
-	/** Initialise le menu du jeu avec choix taille grille / solo / duo / qui commence
+	/** 
+	 * Initialise le menu du jeu avec choix taille grille / solo / duo / qui commence
 	 * a executer apres le test unitaire
 	 * @return : tableau contenant la configuraton du jeu
 	 * @author S. GIRARDEAU
@@ -161,11 +161,15 @@ class Othello {
 	 */
 	int[] requestPiece() {
 		String request;
-		int i = -150;
+		
+		// Valeurs par defaut en cas d'erreur
+		int i = -150; 
 		int j = -150;
 		
 		do {
 			request = SimpleInput.getString("Entrez les coordonnees sous la forme (chiffrelettre) (ex: 1a) : ");
+			
+			//transformation des lettres en chiffre (autorise par Mme Naert)
 			if (request.length() == 2) {
 				i = ((int) request.charAt(0)) -49; // calcul de la veritable valeur de i
 				j = ((int) request.charAt(1)) -97; // calcul de la veritable valeur de j
@@ -174,9 +178,7 @@ class Othello {
 				i = ((int) request.charAt(1)) -49 + 10; // on prends en compte le cas ou le nombre depasse 9
 				j = ((int) request.charAt(2)) -97;
 			}
-				
-			System.out.println(i + " " + j);
-		} while (request.length() != 2 && request.length() != 3 || i < 0 || i >= grid.length || j < 0 || j >= grid.length || grid[i][j] != '^'); // || grid[i][j] != '^' ajouter les conditions pour verifier que les nombres ne soit pas out of bound dans la grille
+		} while (request.length() != 2 && request.length() != 3 || i < 0 || i >= grid.length || j < 0 || j >= grid.length || grid[i][j] != '^');
 		
 		return new int[] {i, j};
 	}
@@ -185,12 +187,10 @@ class Othello {
 	 * @author Antoine CLERO
 	 **/
 	void showGrid (){
-
-
 		
-		showOthello();
+		showOthello(); // affiche le logo a chaque fois
 		
-		System.out.println("Au tour des " + pieceJoueur);
+		System.out.println("Au tour des " + pieceJoueur); // indique quel est le joueur qui joue
 		
 		System.out.print("   ");
 		for(int k = 97; k < grid.length + 96; k++){  //Affiche les lettres indiquant les colonnes 
@@ -511,41 +511,31 @@ class Othello {
 			} 
 		}
 		char[][] tabCopie = copieTableau();
-		///Creation des listes qui compte le nombre de points rapporte (pointsRapportes) avec le placement de la piece a certaine coordonnee (coupsAutorise)
-		///En lisant le tableau de droite a gauche et de heut en bas, l'indice 0 correspond au premier coup autorise, l'indice 1 au deuxieme coup autorise, etc
+		//Creation des listes qui compte le nombre de points rapporte (pointsRapportes) avec le placement de la piece a certaine coordonnee (coupsAutorise)
+		//En lisant le tableau de droite a gauche et de heut en bas, l'indice 0 correspond au premier coup autorise, l'indice 1 au deuxieme coup autorise, etc
 		int[][] coupsAutorise = new int[nombreCoupsAutorises][2];
 
 		int[] pointsRapportes = new int[nombreCoupsAutorises];
 
 		//calcul du nombre de points rapporte par chaque placement possibles
 		int i = 0;
-		  ///System.out.println("taille : " + grid.length);
 		for (int j = 0; j < grid.length; j++){
 			for (int k = 0; k < grid.length; k++){
-				  ///System.out.println(" j : " + j +"  k : "+k);
 				  
 				if (grid[j][k] == '^'){
 					
 					tabCopie = copieTableau(); //copie le tableau grid
-					  ///System.out.print("nouveau tableau");
-					  ///displayTabTestUnitaire(tabCopie);
 
 					coupsAutorise[i][0] = j; //Enregistrement des indice correspondant au coup i
 					coupsAutorise[i][1] = k;
 					pointsRapportes[i] = placeEtRetournePiece(tabCopie,coupsAutorise[i]); //retournePiece renvoie le nombre de pieces retournees au coup i
-					  ///displayTabTestUnitaire(tabCopie);
-					  ///displayTabTest(coupsAutorise);
-					  ///displayTab(pointsRapportes);
-					
 
 					i++;
 				}
 			}
 		}
-		///displayTab(coupReflechi);
-		  System.out.println( "nouveau tableau" );
+
 		  displayTabTestUnitaire(grid);
-		  System.out.println(grid == tabCopie );
 		return coupsAutorise[indicePlusGrand(pointsRapportes)]; //Renvoie le couple de coordonnees (j,k) 
 
 	}
@@ -665,7 +655,6 @@ class Othello {
 			decalage++;
 			nombrePieceEncadree ++;
 		}
-		System.out.println("1");
 		return nombrePieceEncadree;
 		}
 
@@ -685,7 +674,6 @@ class Othello {
 			decalage++;
 			nombrePieceEncadree ++;
 		}
-		System.out.println("1");
 		return nombrePieceEncadree;
 		}
 
@@ -705,7 +693,6 @@ class Othello {
 			decalage++;
 			nombrePieceEncadree ++;
 		}
-		System.out.println("1");
 		return nombrePieceEncadree;
 		}
 
@@ -725,7 +712,6 @@ class Othello {
 			decalage++;
 			nombrePieceEncadree ++;
 		}
-		System.out.println("1");
 		return nombrePieceEncadree;
 		}
 
@@ -745,7 +731,6 @@ class Othello {
 			decalage++;
 			nombrePieceEncadree ++;
 		}
-		System.out.println("1");
 		return nombrePieceEncadree;
 		}
 
@@ -765,7 +750,6 @@ class Othello {
 			decalage++;
 			nombrePieceEncadree ++;
 		}
-		System.out.println("1");
 		return nombrePieceEncadree;
 		}
 
@@ -785,7 +769,6 @@ class Othello {
 			decalage++;
 			nombrePieceEncadree ++;
 		}
-		System.out.println("1");
 		return nombrePieceEncadree;
 		}
 
@@ -805,7 +788,6 @@ class Othello {
 			decalage++;
 			nombrePieceEncadree ++;
 		}
-		System.out.println("1");
 		return nombrePieceEncadree;
 		}
 
@@ -899,7 +881,6 @@ class Othello {
 	 * @param tab : grille du plateau
 	 **/
 	void displayTabTestUnitaire (char[][] tab){
-		// System.out.print("\033c"); //Vide la console
 		System.out.print("   ");
 		for(int k = 97; k < tab.length + 96; k++){  //Affiche les lettres indiquant les colonnes 
 			System.out.print((char)k + " ");        //transformation des chiffre en lettre (autorisee par Mme Naert)
@@ -982,7 +963,6 @@ class Othello {
 				}
 			}
 			switchPlayer();
-			System.out.println("finJeu");
 		}
 		return end;
 	}
@@ -1007,6 +987,10 @@ class Othello {
 		return resultat;
 	}
 	
+	/**
+	 * Affiche simplement un tableau pour les tests
+	 * @param int[] t : tableau a afficher
+	 */
 	void displayTab(int[] t){
         int i = 0;
         System.out.print("{");
@@ -1024,8 +1008,10 @@ class Othello {
     
     
     
-    
-    
+    /**
+     * affiche un tableau en 2d comme showTab, mais pour les tests unitaires
+     * @param int[][] tab : tableau a afficher
+     */
     void displayTabTest (int[][] tab){
 		System.out.print("   ");
 		for(int k = 97; k < tab.length + 96; k++){  //Affiche les lettres indiquant les colonnes 
