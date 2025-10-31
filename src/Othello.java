@@ -183,7 +183,8 @@ class Othello {
 		return new int[] {i, j};
 	}
 	
-	/**Affiche correctement le tableau
+	/**
+	 * Affiche correctement le tableau
 	 * @author Antoine CLERO
 	 **/
 	void showGrid (){
@@ -535,7 +536,6 @@ class Othello {
 			}
 		}
 
-		  displayTabTestUnitaire(grid);
 		return coupsAutorise[indicePlusGrand(pointsRapportes)]; //Renvoie le couple de coordonnees (j,k) 
 
 	}
@@ -968,7 +968,7 @@ class Othello {
 	}
 	/**
 	 * Verifie si le joueur actuel peut jouer ou non
-	 * @return resultat : true si le joueur peut jouerv/ false sinon
+	 * @return resultat : true si le joueur peut jouer/ false sinon
 	 * @author Antoine CLERO
 	 */ 
 	boolean peutJouer(){
@@ -1008,28 +1008,5 @@ class Othello {
     
     
     
-    /**
-     * affiche un tableau en 2d comme showTab, mais pour les tests unitaires
-     * @param int[][] tab : tableau a afficher
-     */
-    void displayTabTest (int[][] tab){
-		System.out.print("   ");
-		for(int k = 97; k < tab.length + 96; k++){  //Affiche les lettres indiquant les colonnes 
-			System.out.print((char)k + " ");        //transformation des chiffre en lettre (autorisee par Mme Naert)
-		}
-		System.out.println((char)(tab.length + 96));
-		
-		for(int i = 0; i < tab.length; i++){
-			if (i < 9){
-				System.out.print(" " + (i + 1) + " "); //Affiche les nombres indiquant les lignes
-			}else{
-				System.out.print((i + 1)+ " ");
-			}
-			for (int j = 0; j < tab[i].length-1; j++){
-				System.out.print (tab[i][j]);       //Affichage du plateau
-				System.out.print('|');
-			}
-			System.out.println(tab[i][tab[i].length-1]);
-		}
-	}
+    
 }
